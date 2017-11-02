@@ -1,11 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 /**
  * Created by thebiteffect on 9/23/17.
@@ -20,8 +25,6 @@ public class PanicTestFieldOrientated extends OpMode {
             motorRightA,
             motorRightB;
 
-    GyroSensor gyro;
-
     double temp,
             x,
             y;
@@ -34,6 +37,10 @@ public class PanicTestFieldOrientated extends OpMode {
     velocityDrive,
             strafeDrive,
             rotationDrive;
+
+    BNO055IMU imu;
+
+    Orientation angles;
 
     boolean fieldOrient = true;
 
@@ -69,8 +76,9 @@ public class PanicTestFieldOrientated extends OpMode {
 
 
         if (fieldOrient) {
-            temp = y * Math.toDegrees(Math.cos(Math.toRadians(gyro.getHeading())) + x * Math.sin(Math.toRadians(gyro.getHeading())));
-            x = -y * Math.toDegrees(Math.sin(Math.toRadians(gyro.getHeading())) + x * Math.cos(Math.toRadians(gyro.getHeading())));
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            temp = y * Math.toDegrees(Math.cos(Math.toRadians(angles.firstAngle)) + x * Math.sin(Math.toRadians(angles.firstAngle)));
+            x = -y * Math.toDegrees(Math.sin(Math.toRadians(angles.firstAngle)) + x * Math.cos(Math.toRadians(angles.firstAngle)));
             y = temp;
         }
 
