@@ -6,20 +6,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.MecanumDrive;
 
-/**
- * Created by thebiteffect on 11/27/17.
- */
-
 public class PanicAutonomousBase extends LinearOpMode {
     MecanumDrive drive = new MecanumDrive();
 
     boolean isFar = false;
 
+    int servoDegrees = 180;
+
     Servo gemSensorArm;
     ColorSensor gemSensor;
-
-    enum teamColor{red, blue}
-
     teamColor currentTeam, detectedBall;
 
     @Override
@@ -29,7 +24,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         // Other Init
         gemSensorArm = hardwareMap.servo.get("Gem Arm Servo");
         gemSensor = hardwareMap.colorSensor.get("Gem Sensor");
-        gemSensorArm.setPosition(20);
+        gemSensorArm.setPosition(20 / servoDegrees);
 
 //        drive.motorRightA = hardwareMap.dcMotor.get("motorRightA");
 //        drive.motorRightB = hardwareMap.dcMotor.get("motorRightB");
@@ -39,7 +34,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         waitForStart(); // Wait for the start
 
         // Step 1a. Lower the arm.
-        gemSensorArm.setPosition(154);
+        gemSensorArm.setPosition(154 / servoDegrees);
         sleep(2000);
 
         // Step 1b. Figure out the color of the ball on the left side.
@@ -62,4 +57,6 @@ public class PanicAutonomousBase extends LinearOpMode {
         }
 
     }
+
+    enum teamColor {red, blue}
 }
