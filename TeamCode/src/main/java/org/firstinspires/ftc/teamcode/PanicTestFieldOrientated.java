@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -19,18 +18,20 @@ import static android.os.SystemClock.sleep;
  * Created by thebiteffect on 9/23/17.
  */
 
+
 @TeleOp(name = "Panic: Field Orientated", group = "PanicDEBUG")
 public class PanicTestFieldOrientated extends OpMode {
 
+    final long ARM_MOVE_TIME_MS = 100;
     DcMotor motorLeftA,
             motorLeftB,
             motorRightA,
-            motorRightB;
+            motorRightB,
 
+    liftMotor;
     double temp, gyro,
             x,
             y;
-
     float powerRightA,
             powerRightB,
             powerLeftA,
@@ -39,23 +40,19 @@ public class PanicTestFieldOrientated extends OpMode {
     velocityDrive,
             strafeDrive,
             rotationDrive;
-
     BNO055IMU imu;
-
     boolean lastYInput = false;
     boolean thisYInput = false;
     boolean gyroModeXP = false;
-
     boolean lastDpadLeftInput = false;
     boolean thisDpadLeftInput = false;
-
     boolean lastDpadRightInput = false;
     boolean thisDpadRightInput = false;
-
+    boolean lastDpadUpInput = false;
+    boolean thisDpadUpInput = false;
+    boolean lastDpadDownInput = false;
+    boolean thisDpadDownInput = false;
     CRServo servo1, servo2;
-
-    final long ARM_MOVE_TIME_MS = 100;
-
     Orientation angles;
 
     boolean fieldOrient = true;
@@ -77,6 +74,8 @@ public class PanicTestFieldOrientated extends OpMode {
         motorRightB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorLeftA.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorLeftB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         powerRightA = 0;
         powerRightB = 0;
@@ -101,6 +100,10 @@ public class PanicTestFieldOrientated extends OpMode {
 
     @Override
     public void loop() {
+        thisDpadLeftInput = gamepad1.dpad_left;
+        thisDpadRightInput = gamepad1.dpad_right;
+        thisDpadUpInput = gamepad1.dpad_up;
+        thisDpadDownInput = gamepad1.dpad_down;
 
         if (thisDpadLeftInput && lastDpadLeftInput) {
             servo1.setPower(1);
@@ -112,14 +115,21 @@ public class PanicTestFieldOrientated extends OpMode {
         if (thisDpadRightInput /*&& lastDpadRightInput*/) {
             servo1.setPower(-1);
             servo2.setPower(-1);
-            sleep(ARM_MOVE_TIME_MS);
+            // sleep(ARM_MOVE_TIME_MS);
             // servo.setPower(0);
         } else { // FIXME: 10/5/17 remove stuff
             servo1.setPower(0);
             servo2.setPower(0);
         }
+        if (thisDpadUpInput && lastDpadUpInput) {
+            liftMotor.setPower(1);
+        } else if (thisDpadDownInput && lastDpadDownInput) {
+            liftMotor.setPower(-1);
+        }
         lastDpadLeftInput = !thisDpadLeftInput;
         lastDpadRightInput = !thisDpadRightInput;
+        lastDpadUpInput = !thisDpadUpInput;
+        lastDpadDownInput = !thisDpadDownInput;
 
         velocityDrive = gamepad1.left_stick_y;
         strafeDrive = -gamepad1.left_stick_x;
@@ -137,8 +147,8 @@ public class PanicTestFieldOrientated extends OpMode {
         telemetry.addData("rotationDrive", rotationDrive);
 
         if (fieldOrient) {
-            temp = y * Math.toDegrees(Math.cos(Math.toRadians(gyro)) + x * Math.sin(Math.toRadians(gyro)));
-            x = -y * Math.toDegrees(Math.sin(Math.toRadians(gyro)) + x * Math.cos(Math.toRadians(gyro)));
+            temp = y * Math.toDegrees(Math.cos(Math.toRadians(gyro)) + x * Math.toDegrees(Math.sin(Math.toRadians(gyro))));
+            x = -y * Math.toDegrees(Math.sin(Math.toRadians(gyro)) + x * Math.toDegrees(Math.cos(Math.toRadians(gyro))));
             y = temp;
         }
 
