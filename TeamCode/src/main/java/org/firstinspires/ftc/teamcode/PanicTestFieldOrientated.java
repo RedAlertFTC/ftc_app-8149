@@ -65,6 +65,8 @@ public class PanicTestFieldOrientated extends OpMode {
         motorLeftA = hardwareMap.dcMotor.get("motorLeftA");
         motorLeftB = hardwareMap.dcMotor.get("motorLeftB");
 
+        liftMotor = hardwareMap.dcMotor.get("liftMotor");
+
         motorRightA.setDirection(DcMotor.Direction.REVERSE);
         motorRightB.setDirection(DcMotor.Direction.REVERSE);
         motorLeftA.setDirection(DcMotor.Direction.FORWARD);
@@ -112,19 +114,19 @@ public class PanicTestFieldOrientated extends OpMode {
             servo1.setPower(0);
             servo2.setPower(0);
         }
-        if (thisDpadRightInput /*&& lastDpadRightInput*/) {
+        if (thisDpadRightInput) {
             servo1.setPower(-1);
             servo2.setPower(-1);
-            // sleep(ARM_MOVE_TIME_MS);
-            // servo.setPower(0);
-        } else { // FIXME: 10/5/17 remove stuff
+        } else {
             servo1.setPower(0);
             servo2.setPower(0);
         }
-        if (thisDpadUpInput && lastDpadUpInput) {
+        if (thisDpadUpInput /* && lastDpadUpInput*/) {
             liftMotor.setPower(1);
-        } else if (thisDpadDownInput && lastDpadDownInput) {
+        } else if (thisDpadDownInput /* && lastDpadDownInput*/) {
             liftMotor.setPower(-1);
+        } else {
+            liftMotor.setPower(0);
         }
         lastDpadLeftInput = !thisDpadLeftInput;
         lastDpadRightInput = !thisDpadRightInput;
@@ -134,6 +136,23 @@ public class PanicTestFieldOrientated extends OpMode {
         velocityDrive = gamepad1.left_stick_y;
         strafeDrive = -gamepad1.left_stick_x;
         rotationDrive = -gamepad1.right_stick_x;
+
+        if (gamepad1.left_stick_x == 0 || gamepad1.left_stick_y == 0 || gamepad1.right_stick_x == 0) {
+            powerRightA = Range.clip(powerRightA, -1, 1);
+            powerRightB = Range.clip(powerRightB, -1, 1);
+            powerLeftA = Range.clip(powerLeftA, -1, 1);
+            powerLeftB = Range.clip(powerLeftB, -1, 1);
+        } else {
+            powerRightA /= 2;
+            powerRightB /= 2;
+            powerLeftA /= 2;
+            powerLeftB /= 2;
+
+            powerRightA = Range.clip(powerRightA, -0.5f, 0.5f);
+            powerRightB = Range.clip(powerRightB, -0.5f, 0.5f);
+            powerLeftA = Range.clip(powerLeftA, -0.5f, 0.5f);
+            powerLeftB = Range.clip(powerLeftB, -0.5f, 0.5f);
+        }
 
         x = strafeDrive;
         y = velocityDrive;
@@ -154,7 +173,7 @@ public class PanicTestFieldOrientated extends OpMode {
 
         strafeDrive = (float) x;
         velocityDrive = (float) y;
-        
+
         powerRightA = velocityDrive + rotationDrive + strafeDrive;
         powerRightB = velocityDrive + rotationDrive - strafeDrive;
         powerLeftA = velocityDrive - rotationDrive - strafeDrive;
@@ -165,17 +184,6 @@ public class PanicTestFieldOrientated extends OpMode {
         motorLeftA.setPower(powerLeftA);
         motorLeftB.setPower(powerLeftB);
 
-        if (gamepad1.left_stick_x == 0 || gamepad1.left_stick_y == 0 || gamepad1.right_stick_x == 0) {
-            powerRightA = Range.clip(powerRightA, -1, 1);
-            powerRightB = Range.clip(powerRightB, -1, 1);
-            powerLeftA = Range.clip(powerLeftA, -1, 1);
-            powerLeftB = Range.clip(powerLeftB, -1, 1);
-        } else {
-            powerRightA = Range.clip(powerRightA, -0.5f, 0.5f);
-            powerRightB = Range.clip(powerRightB, -0.5f, 0.5f);
-            powerLeftA = Range.clip(powerLeftA, -0.5f, 0.5f);
-            powerLeftB = Range.clip(powerLeftB, -0.5f, 0.5f);
-        }
 
     }
 
