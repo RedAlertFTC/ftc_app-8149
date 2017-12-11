@@ -100,7 +100,7 @@ public class PanicTestFieldOrientated extends OpMode {
         if (thisAInput && lastAInput) {
             servo1.setPower(1);
             servo2.setPower(1);
-        } else if (thisAInput && !lastAInput) {
+        } else if (!thisAInput && !lastAInput) {
             servo1.setPower(-1);
             servo2.setPower(-1);
             sleep(ARM_MOVE_TIME_MS);
