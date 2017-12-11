@@ -41,17 +41,8 @@ public class PanicTestFieldOrientated extends OpMode {
             strafeDrive,
             rotationDrive;
     BNO055IMU imu;
-    boolean lastYInput = false;
-    boolean thisYInput = false;
+    boolean lastAInput = false, thisAInput = false;
     boolean gyroModeXP = false;
-    boolean lastDpadLeftInput = false;
-    boolean thisDpadLeftInput = false;
-    boolean lastDpadRightInput = false;
-    boolean thisDpadRightInput = false;
-    boolean lastDpadUpInput = false;
-    boolean thisDpadUpInput = false;
-    boolean lastDpadDownInput = false;
-    boolean thisDpadDownInput = false;
     CRServo servo1, servo2;
     Orientation angles;
 
@@ -102,36 +93,21 @@ public class PanicTestFieldOrientated extends OpMode {
 
     @Override
     public void loop() {
-        thisDpadLeftInput = gamepad1.dpad_left;
-        thisDpadRightInput = gamepad1.dpad_right;
-        thisDpadUpInput = gamepad1.dpad_up;
-        thisDpadDownInput = gamepad1.dpad_down;
+        thisAInput = gamepad2.a;
 
-        if (thisDpadLeftInput && lastDpadLeftInput) {
+        liftMotor.setPower(-gamepad2.left_stick_y / 2);
+
+        if (thisAInput && lastAInput) {
             servo1.setPower(1);
             servo2.setPower(1);
+        } else if (thisAInput && !lastAInput) {
+            servo1.setPower(-1);
+            servo2.setPower(-1);
             sleep(ARM_MOVE_TIME_MS);
             servo1.setPower(0);
             servo2.setPower(0);
         }
-        if (thisDpadRightInput) {
-            servo1.setPower(-1);
-            servo2.setPower(-1);
-        } else {
-            servo1.setPower(0);
-            servo2.setPower(0);
-        }
-        if (thisDpadUpInput /* && lastDpadUpInput*/) {
-            liftMotor.setPower(1);
-        } else if (thisDpadDownInput /* && lastDpadDownInput*/) {
-            liftMotor.setPower(-1);
-        } else {
-            liftMotor.setPower(0);
-        }
-        lastDpadLeftInput = !thisDpadLeftInput;
-        lastDpadRightInput = !thisDpadRightInput;
-        lastDpadUpInput = !thisDpadUpInput;
-        lastDpadDownInput = !thisDpadDownInput;
+        lastAInput = !thisAInput;
 
         velocityDrive = gamepad1.left_stick_y;
         strafeDrive = -gamepad1.left_stick_x;
@@ -179,12 +155,10 @@ public class PanicTestFieldOrientated extends OpMode {
         powerLeftA = velocityDrive - rotationDrive - strafeDrive;
         powerLeftB = velocityDrive - rotationDrive + strafeDrive;
 
-        motorRightA.setPower(powerRightA);
-        motorRightB.setPower(powerRightB);
-        motorLeftA.setPower(powerLeftA);
-        motorLeftB.setPower(powerLeftB);
-
-
+        motorRightA.setPower(powerRightA * 0.75);
+        motorRightB.setPower(powerRightB * 0.75);
+        motorLeftA.setPower(powerLeftA * 0.75);
+        motorLeftB.setPower(powerLeftB * 0.75);
     }
 
     @Override
