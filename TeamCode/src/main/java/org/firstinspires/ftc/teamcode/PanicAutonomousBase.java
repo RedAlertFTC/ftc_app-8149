@@ -47,7 +47,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         // Step 1c. Twist and stop!
 
         if (detectedBall == currentTeam) {
-
+            drive.update(0, 0, -0.5);
             sleep(1000);
             drive.stop();
         } else if (detectedBall != currentTeam) {
