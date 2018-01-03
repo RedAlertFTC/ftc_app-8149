@@ -3,16 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-import static android.os.SystemClock.sleep;
 
 /**
  * Created by thebiteffect on 9/23/17.
@@ -22,7 +20,9 @@ import static android.os.SystemClock.sleep;
 @TeleOp(name = "Panic: Field Orientated", group = "PanicDEBUG")
 public class PanicTestFieldOrientated extends OpMode {
 
-    final long ARM_MOVE_TIME_MS = 100;
+    final long ARM_MOVE_TIME_MS = 1000;
+
+    final double SERVO_DEGREES = 180;
     DcMotor motorLeftA,
             motorLeftB,
             motorRightA,
@@ -42,8 +42,9 @@ public class PanicTestFieldOrientated extends OpMode {
             rotationDrive;
     BNO055IMU imu;
     boolean lastAInput = false, thisAInput = false;
+    boolean lastYInput = false, thisYInput = false;
     boolean gyroModeXP = false;
-    CRServo servo1, servo2;
+    Servo servo1, servo2, jewelSensorArm;
     Orientation angles;
 
     boolean fieldOrient = true;
@@ -75,60 +76,54 @@ public class PanicTestFieldOrientated extends OpMode {
         powerLeftA = 0;
         powerLeftB = 0;
 
-        servo1 = hardwareMap.crservo.get("Servo1");
-        servo2 = hardwareMap.crservo.get("Servo2");
-        servo2.setDirection(DcMotor.Direction.REVERSE);
+        servo1 = hardwareMap.servo.get("Servo1");
+        servo2 = hardwareMap.servo.get("Servo2");
+        servo2.setDirection(Servo.Direction.REVERSE);
+
+        jewelSensorArm = hardwareMap.servo.get("Jewel Arm Servo");
 
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
         //gyro.calibrate();
 
+
     }
 
     @Override
     public void loop() {
         thisAInput = gamepad2.a;
+        thisYInput = gamepad2.y;
 
         liftMotor.setPower(-gamepad2.left_stick_y / 2);
 
         if (thisAInput && lastAInput) {
-            servo1.setPower(1);
-            servo2.setPower(1);
-        } else if (!thisAInput && !lastAInput) {
-            servo1.setPower(-1);
-            servo2.setPower(-1);
-            sleep(ARM_MOVE_TIME_MS);
-            servo1.setPower(0);
-            servo2.setPower(0);
+            servo1.setPosition(0 / SERVO_DEGREES);
+            servo2.setPosition(0 / SERVO_DEGREES);
+        } else if (thisAInput ^ !lastAInput) { // ^ is an XOR (or eXclusive-OR) for booleans. Very useful!
+            servo1.setPosition(180 / SERVO_DEGREES);
+            servo2.setPosition(180 / SERVO_DEGREES);
+        }
+
+        if (thisYInput && lastYInput) {
+            if (jewelSensorArm.getPosition() == 0) {
+                jewelSensorArm.setPosition(0.8);
+            } else {
+                jewelSensorArm.setPosition(0);
+            }
         }
         lastAInput = !thisAInput;
+        lastYInput = !thisYInput;
 
-        velocityDrive = gamepad1.left_stick_y;
-        strafeDrive = -gamepad1.left_stick_x;
-        rotationDrive = -gamepad1.right_stick_x;
+        velocityDrive = gamepad1.left_stick_y * 0.75f;
+        strafeDrive = -gamepad1.left_stick_x * 0.75f;
+        rotationDrive = -gamepad1.right_stick_x * 0.75f;
 
-        if (gamepad1.left_stick_x == 0 || gamepad1.left_stick_y == 0 || gamepad1.right_stick_x == 0) {
-            powerRightA = Range.clip(powerRightA, -1, 1);
-            powerRightB = Range.clip(powerRightB, -1, 1);
-            powerLeftA = Range.clip(powerLeftA, -1, 1);
-            powerLeftB = Range.clip(powerLeftB, -1, 1);
-        } else {
-            powerRightA /= 2;
-            powerRightB /= 2;
-            powerLeftA /= 2;
-            powerLeftB /= 2;
-
-            powerRightA = Range.clip(powerRightA, -0.5f, 0.5f);
-            powerRightB = Range.clip(powerRightB, -0.5f, 0.5f);
-            powerLeftA = Range.clip(powerLeftA, -0.5f, 0.5f);
-            powerLeftB = Range.clip(powerLeftB, -0.5f, 0.5f);
-        }
 
         x = strafeDrive;
         y = velocityDrive;
@@ -147,6 +142,7 @@ public class PanicTestFieldOrientated extends OpMode {
             y = temp;
         }
 
+
         strafeDrive = (float) x;
         velocityDrive = (float) y;
 
@@ -155,10 +151,16 @@ public class PanicTestFieldOrientated extends OpMode {
         powerLeftA = velocityDrive - rotationDrive - strafeDrive;
         powerLeftB = velocityDrive - rotationDrive + strafeDrive;
 
-        motorRightA.setPower(powerRightA * 0.75);
-        motorRightB.setPower(powerRightB * 0.75);
-        motorLeftA.setPower(powerLeftA * 0.75);
-        motorLeftB.setPower(powerLeftB * 0.75);
+        powerRightA = Range.clip(powerRightA, -1f, 1f);
+        powerRightB = Range.clip(powerRightB, -1f, 1f);
+        powerLeftA = Range.clip(powerLeftA, -1f, 1f);
+        powerLeftB = Range.clip(powerLeftB, -1f, 1f);
+
+        motorRightA.setPower(powerRightA * (1 - ((double) gamepad1.left_trigger * 0.5)));
+        motorRightB.setPower(powerRightB * (1 - ((double) gamepad1.left_trigger * 0.5)));
+        motorLeftA.setPower(powerLeftA * (1 - ((double) gamepad1.left_trigger * 0.5)));
+        motorLeftB.setPower(powerLeftB * (1 - ((double) gamepad1.left_trigger * 0.5)));
+        telemetry.addData("left_trigger", gamepad1.left_trigger);
     }
 
     @Override
