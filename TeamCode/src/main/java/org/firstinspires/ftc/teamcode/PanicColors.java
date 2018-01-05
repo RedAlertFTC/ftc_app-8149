@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -16,7 +15,7 @@ public class PanicColors extends OpMode {
 
     @Override
     public void init() {
-     colorSensor = hardwareMap.colorSensor.get("Color Sensor");
+        colorSensor = hardwareMap.colorSensor.get("Jewel Sensor");
     }
 
     @Override
