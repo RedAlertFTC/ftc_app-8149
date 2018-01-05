@@ -6,16 +6,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.utils.MatrixUtils;
 import org.firstinspires.ftc.teamcode.utils.MecanumDrive;
 
 import static org.firstinspires.ftc.teamcode.PanicAutonomousBase.programType.far;
@@ -138,118 +132,6 @@ public class PanicAutonomousBase extends LinearOpMode {
         }
         sleep(5000);
         drive.stop();
-
-        // Step 2a. Find the VuMark
-        if ((currentProgramType == near && currentTeam == red) || (currentProgramType == far && currentTeam == blue)) {
-            drive.update(0, 0, -0.3);
-            sleep(5000);
-            drive.stop();
-            sleep(1000);
-            do {
-                drive.update(0, 0, -0.3); // TODO: Test
-                telemetry.addData("vuMark", RelicRecoveryVuMark.from(relicTemplate));
-            }
-            while (RelicRecoveryVuMark.from(relicTemplate) == RelicRecoveryVuMark.UNKNOWN && opModeIsActive());
-        } else if ((currentProgramType == far && currentTeam == red) || (currentProgramType == near && currentTeam == blue)) {
-            drive.update(0, 0, -0.3);
-            sleep(5000);
-            drive.stop();
-            sleep(1000);
-            do {
-                drive.update(0, 0, 0.3); // TODO: Test
-                telemetry.addData("vuMark", RelicRecoveryVuMark.from(relicTemplate));
-            }
-            while (RelicRecoveryVuMark.from(relicTemplate) == RelicRecoveryVuMark.UNKNOWN && opModeIsActive());
-        }
-        drive.stop();
-
-        // Step 2b. Record VuMark
-
-        detectedVuMark = RelicRecoveryVuMark.from(relicTemplate);
-        telemetry.addLine();
-        telemetry.addData("detectedVuMark", detectedBall);
-        telemetry.update();
-
-
-        // Step 2c. Figure out where to go
-
-        if (currentTeam == red) {
-            if (currentProgramType == near) {
-                whereWeNeedToGo.translate(-108.93f, -596.84f, -822.89f);
-                whereWeNeedToGo.rotate(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES, -4, -13, 84);
-            } else if (currentProgramType == far) {
-                whereWeNeedToGo.translate(-42.54f, -351.17f, -787.79f);
-                whereWeNeedToGo.rotate(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES, 4, -2, -95);
-            }
-        } else if (currentTeam == blue) {
-            if (currentProgramType == near) {
-                whereWeNeedToGo.translate(-56.24f, -705.93f, -952.24f);
-                whereWeNeedToGo.rotate(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES, 40, -89, -132);
-            } else if (currentProgramType == far) {
-                whereWeNeedToGo.translate(18.92f, 295.35f, -1135.27f);
-                whereWeNeedToGo.rotate(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES, 4, -31, -97);
-            }
-        }
-        double velocity = 0, strafe = 0, rotation = 0;
-        whereWeAre = ((VuforiaTrackableDefaultListener) relicTemplate.getListener()).getPose();
-        while (MatrixUtils.isNotClose(whereWeAre, whereWeNeedToGo)) {
-            whereWeAre = ((VuforiaTrackableDefaultListener) relicTemplate.getListener()).getPose();
-            if (whereWeAre.getTranslation().get(1) - 0.5 > whereWeNeedToGo.getTranslation().get(1)) {
-                strafe = -0.2;
-            } else if (whereWeAre.getTranslation().get(1) < whereWeNeedToGo.getTranslation().get(1) - 0.5) {
-                strafe = 0.2;
-            }
-            if (whereWeAre.getTranslation().get(2) - 0.5 > whereWeNeedToGo.getTranslation().get(2)) {
-                velocity = 0.2;
-            } else if (whereWeAre.getTranslation().get(2) < whereWeNeedToGo.getTranslation().get(2) - 0.5) {
-                velocity = -0.2;
-            }
-            if ((Orientation.getOrientation(whereWeAre, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle) - 0.5 > Orientation.getOrientation(whereWeNeedToGo, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle) {
-                rotation = -0.2;
-            } else if ((Orientation.getOrientation(whereWeAre, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle) < Orientation.getOrientation(whereWeNeedToGo, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle - 0.5) {
-                rotation = 0.2;
-            }
-            drive.update(velocity, strafe, rotation);
-        }
-        drive.stop();
-
-        /*
-        if (detectedVuMark == RelicRecoveryVuMark.LEFT) {
-            drive.update(0, -0.4, 0);
-        } else if (detectedVuMark == RelicRecoveryVuMark.RIGHT) {
-            drive.update(0, 0.4, 0);
-        }
-        sleep(500);
-        drive.stop();
-
-        // Drive forward
-        drive.update(0.5, 0, 0);
-        sleep(1000);
-        drive.stop();
-
-        // Release the block
-        servo1.setPosition(180 / SERVO_DEGREES);
-        servo2.setPosition(180 / SERVO_DEGREES);
-        sleep(100);
-
-        // Go backward
-        drive.update(-0.5, 0, 0);
-        sleep(500);
-        drive.stop();
-
-        // Close the arms
-        servo1.setPosition(0 / SERVO_DEGREES);
-        servo2.setPosition(0 / SERVO_DEGREES);
-
-        // Go and ram
-        drive.update(0.5, 0, 0);
-        sleep(1000);
-
-        // Go back again
-        drive.update(-0.5, 0 , 0);
-        sleep(500);
-        drive.stop();
-        */
 
     }
 
