@@ -44,11 +44,11 @@ public class PanicAutonomousBase extends LinearOpMode {
         // Other Init
         gemSensorArm = hardwareMap.servo.get("Jewel Arm Servo");
         gemSensor = hardwareMap.colorSensor.get("Jewel Sensor");
+        gemSensorArm.setPosition(0 / SERVO_DEGREES);
 
         servo1 = hardwareMap.servo.get("Servo1");
         servo2 = hardwareMap.servo.get("Servo2");
         servo2.setDirection(Servo.Direction.REVERSE);
-        gemSensorArm.setPosition(20 / SERVO_DEGREES);
 
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
 
