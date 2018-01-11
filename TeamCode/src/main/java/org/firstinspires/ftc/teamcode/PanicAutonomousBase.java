@@ -68,6 +68,8 @@ public class PanicAutonomousBase extends LinearOpMode {
         VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate"); // could possibly help in debugging
+        servo1.setPosition(180 / SERVO_DEGREES);
+        servo2.setPosition(180 / SERVO_DEGREES);
 
         waitForStart(); // Wait for the start
 
@@ -82,6 +84,9 @@ public class PanicAutonomousBase extends LinearOpMode {
         liftMotor.setPower(1);
         sleep(500);
         liftMotor.setPower(0);
+
+        servo1.setPosition(0 / SERVO_DEGREES);
+        servo2.setPosition(0 / SERVO_DEGREES);
 
         // Step 1b. Figure out the color of the ball on the left side.
         if ((gemSensor.red() - 5) > gemSensor.blue()) {
