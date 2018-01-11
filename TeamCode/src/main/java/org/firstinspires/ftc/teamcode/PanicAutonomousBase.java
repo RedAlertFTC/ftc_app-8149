@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -26,6 +27,7 @@ import static org.firstinspires.ftc.teamcode.PanicAutonomousBase.teamColor.red;
 public class PanicAutonomousBase extends LinearOpMode {
     static double SERVO_DEGREES = 180;
     MecanumDrive drive = new MecanumDrive();
+    DcMotor liftMotor;
     VuforiaLocalizer vuforia;
     Servo servo1, servo2, gemSensorArm;
     ColorSensor gemSensor;
@@ -48,6 +50,8 @@ public class PanicAutonomousBase extends LinearOpMode {
         servo2.setDirection(Servo.Direction.REVERSE);
         gemSensorArm.setPosition(20 / SERVO_DEGREES);
 
+        liftMotor = hardwareMap.dcMotor.get("liftMotor");
+
 //        drive.motorRightA = hardwareMap.dcMotor.get("motorRightA");
 //        drive.motorRightB = hardwareMap.dcMotor.get("motorRightB");
 //        drive.motorLeftA = hardwareMap.dcMotor.get("motorLeftA");
@@ -64,8 +68,6 @@ public class PanicAutonomousBase extends LinearOpMode {
         VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate"); // could possibly help in debugging
-        servo1.setPosition(0 / SERVO_DEGREES);
-        servo2.setPosition(0 / SERVO_DEGREES);
 
         waitForStart(); // Wait for the start
 
@@ -76,6 +78,10 @@ public class PanicAutonomousBase extends LinearOpMode {
         // Step 1a. Lower the arm.
         gemSensorArm.setPosition(160 / SERVO_DEGREES);
         sleep(5000);
+
+        liftMotor.setPower(1);
+        sleep(500);
+        liftMotor.setPower(0);
 
         // Step 1b. Figure out the color of the ball on the left side.
         if ((gemSensor.red() - 5) > gemSensor.blue()) {
@@ -142,7 +148,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         // Step 2a. Find the VuMark
         if ((currentProgramType == near && currentTeam == red) || (currentProgramType == far && currentTeam == blue)) {
             drive.update(0, 0, -0.3);
-            sleep(5000);
+            sleep(5500);
             drive.stop();
             sleep(1000);
             do {
