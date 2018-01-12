@@ -159,6 +159,10 @@ public class PanicAutonomousBase extends LinearOpMode {
             do {
                 drive.update(0, 0, -0.3); // TODO: Test
                 telemetry.addData("vuMark", RelicRecoveryVuMark.from(relicTemplate));
+                telemetry.update();
+                sleep(500);
+                drive.stop();
+                sleep(750);
             }
             while (RelicRecoveryVuMark.from(relicTemplate) == RelicRecoveryVuMark.UNKNOWN && opModeIsActive());
         } else if ((currentProgramType == far && currentTeam == red) || (currentProgramType == near && currentTeam == blue)) {
@@ -169,6 +173,10 @@ public class PanicAutonomousBase extends LinearOpMode {
             do {
                 drive.update(0, 0, 0.3); // TODO: Test
                 telemetry.addData("vuMark", RelicRecoveryVuMark.from(relicTemplate));
+                telemetry.update();
+                sleep(500);
+                drive.stop();
+                sleep(750);
             }
             while (RelicRecoveryVuMark.from(relicTemplate) == RelicRecoveryVuMark.UNKNOWN && opModeIsActive());
         }
