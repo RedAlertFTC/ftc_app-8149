@@ -68,8 +68,8 @@ public class PanicAutonomousBase extends LinearOpMode {
         VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate"); // could possibly help in debugging
-        servo1.setPosition(180 / SERVO_DEGREES);
-        servo2.setPosition(180 / SERVO_DEGREES);
+        servo1.setPosition(0 / SERVO_DEGREES);
+        servo2.setPosition(0 / SERVO_DEGREES);
 
         waitForStart(); // Wait for the start
 
@@ -79,15 +79,16 @@ public class PanicAutonomousBase extends LinearOpMode {
 
         // Step 1a. Lower the arm.
         gemSensorArm.setPosition(160 / SERVO_DEGREES);
-        sleep(5000);
+        sleep(2000);
 
-        liftMotor.setPower(1);
-        sleep(500);
+        servo1.setPosition(180 / SERVO_DEGREES);
+        servo2.setPosition(180 / SERVO_DEGREES);
+        sleep(200);
+
+        liftMotor.setPower(0.5);
+        sleep(4000);
         liftMotor.setPower(0);
-
-        servo1.setPosition(0 / SERVO_DEGREES);
-        servo2.setPosition(0 / SERVO_DEGREES);
-
+        sleep(500);
         // Step 1b. Figure out the color of the ball on the left side.
         if ((gemSensor.red() - 5) > gemSensor.blue()) {
             detectedBall = red;
@@ -97,86 +98,104 @@ public class PanicAutonomousBase extends LinearOpMode {
         telemetry.addData("red", gemSensor.red());
         telemetry.addData("blue", gemSensor.blue());
 
+        telemetry.addData("detectedBall", detectedBall);
         telemetry.update();
 
         // Step 1c. Twist and stop!
 
         if (detectedBall != null) {
             if (detectedBall == currentTeam) {
-                drive.update(0, 0, 0.5);
-                sleep(200);
+                drive.update(0, 0, 0.20);
+                sleep(300);
+                drive.update(0, 0, -0.20);
+                sleep(300);
                 drive.stop();
+                sleep(250);
             } else if (detectedBall != currentTeam) {
-                drive.update(0, 0, -0.5);
-                sleep(200);
+                drive.update(0, 0, -0.20);
+                sleep(300);
+                drive.update(0, 0, 0.20);
+                sleep(300);
                 drive.stop();
+                sleep(250);
             }
         } else {
             // do nothing
         }
-        sleep(1000);
-        gemSensorArm.setPosition(20 / SERVO_DEGREES);
-        sleep(2000);
-        if (false) {
-            // Step 1d. Try to get on the triangle
-            if (currentTeam == red) {
-                if (currentProgramType == near) {
-                    drive.update(-0.05, -0.25, 0);
-                    sleep(4000);
-                    drive.stop();
-                } else if (currentProgramType == far) {
-                    drive.update(0.05, -0.25, 0);
-                    sleep(4000);
-                    drive.stop();
-                }
-            } else if (currentTeam == blue) {
-                if (currentProgramType == near) {
-                    sleep(4000);
-                    drive.stop();
-                    drive.update(-0.05, 0.25, 0);
-                    sleep(4000);
-                    drive.stop();
-                } else if (currentProgramType == far) {
-                    drive.update(0.05, 0.25, 0);
-                }
-            }
-        }
+        sleep(500);
+        gemSensorArm.setPosition(0 / SERVO_DEGREES);
+        sleep(350);
+//        if (false) {
+//            // Step 1d. Try to get on the triangle
+//            if (currentTeam == red) {
+//                if (currentProgramType == near) {
+//                    drive.update(-0.05, -0.25, 0);
+//                    sleep(6000);
+//                    drive.stop();
+//                } else if (currentProgramType == far) {
+//                    drive.update(0.05, -0.25, 0);
+//                    sleep(6000);
+//                    drive.stop();
+//                }
+//            } else if (currentTeam == blue) {
+//                if (currentProgramType == near) {
+//                    drive.update(-0.05, 0.25, 0);
+//                    sleep(6000);
+//                    drive.stop();
+//                } else if (currentProgramType == far) {
+//                    drive.update(0.05, 0.25, 0);
+//                    sleep(6000);
+//                    drive.stop();
+//                }
+//            }
+//        }
+
+
+        drive.update(-0.3, 0, 0);
+        sleep(1500);
+        drive.stop();
+        sleep(100);
 
         if (currentTeam == red) {
-            drive.update(0, 0.3, 0);
+            drive.update(0, 0.4, 0);
         } else if (currentTeam == blue) {
-            drive.update(0, -0.3, 0);
+            drive.update(0, -0.4, 0);
         }
-        sleep(5000);
+        sleep(2100);
+        drive.stop();
+        sleep(100);
+
+        drive.update(0.25, 0, 0);
+        sleep(2000);
         drive.stop();
 
         // Step 2a. Find the VuMark
         if ((currentProgramType == near && currentTeam == red) || (currentProgramType == far && currentTeam == blue)) {
             drive.update(0, 0, -0.3);
-            sleep(5500);
+            sleep(2200);
             drive.stop();
-            sleep(1000);
+            sleep(1500);
             do {
                 drive.update(0, 0, -0.3); // TODO: Test
                 telemetry.addData("vuMark", RelicRecoveryVuMark.from(relicTemplate));
                 telemetry.update();
-                sleep(500);
+                sleep(400);
                 drive.stop();
-                sleep(750);
+                sleep(1250);
             }
             while (RelicRecoveryVuMark.from(relicTemplate) == RelicRecoveryVuMark.UNKNOWN && opModeIsActive());
         } else if ((currentProgramType == far && currentTeam == red) || (currentProgramType == near && currentTeam == blue)) {
-            drive.update(0, 0, -0.3);
-            sleep(5000);
+            drive.update(0, 0, 0.3);
+            sleep(2200);
             drive.stop();
-            sleep(1000);
+            sleep(1500);
             do {
                 drive.update(0, 0, 0.3); // TODO: Test
                 telemetry.addData("vuMark", RelicRecoveryVuMark.from(relicTemplate));
                 telemetry.update();
-                sleep(500);
+                sleep(400);
                 drive.stop();
-                sleep(750);
+                sleep(1250);
             }
             while (RelicRecoveryVuMark.from(relicTemplate) == RelicRecoveryVuMark.UNKNOWN && opModeIsActive());
         }
@@ -186,7 +205,7 @@ public class PanicAutonomousBase extends LinearOpMode {
 
         detectedVuMark = RelicRecoveryVuMark.from(relicTemplate);
         telemetry.addLine();
-        telemetry.addData("detectedVuMark", detectedBall);
+        telemetry.addData("detectedVuMark", detectedVuMark);
         telemetry.update();
 
 
@@ -219,9 +238,9 @@ public class PanicAutonomousBase extends LinearOpMode {
                 strafe = 0.2;
             }
             if (whereWeAre.getTranslation().get(2) - 0.5 > whereWeNeedToGo.getTranslation().get(2)) {
-                velocity = 0.2;
-            } else if (whereWeAre.getTranslation().get(2) < whereWeNeedToGo.getTranslation().get(2) - 0.5) {
                 velocity = -0.2;
+            } else if (whereWeAre.getTranslation().get(2) < whereWeNeedToGo.getTranslation().get(2) - 0.5) {
+                velocity = 0.2;
             }
             if ((Orientation.getOrientation(whereWeAre, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle) - 0.5 > Orientation.getOrientation(whereWeNeedToGo, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle) {
                 rotation = -0.2;
@@ -231,29 +250,50 @@ public class PanicAutonomousBase extends LinearOpMode {
             drive.update(velocity, strafe, rotation);
         }
         drive.stop();
+        sleep(1000);
+        if (currentTeam == red) {
+            if (currentProgramType == near) {
+                drive.update(0, 0, 0);
+                sleep(0);
+            } else if (currentProgramType == far) {
+                drive.update(0, 0, -0.4);
+                sleep(1000);
+            }
+        } else if (currentTeam == blue) {
+            if (currentProgramType == near) {
+                drive.update(0, 0, 0);
+                sleep(0);
+            } else if (currentProgramType == far) {
+                drive.update(0, 0, 0);
+                sleep(0);
+            }
+        }
 
-        /*
-        if (detectedVuMark == RelicRecoveryVuMark.LEFT) {
+        drive.stop();
+       if (detectedVuMark == RelicRecoveryVuMark.LEFT) {
             drive.update(0, -0.4, 0);
         } else if (detectedVuMark == RelicRecoveryVuMark.RIGHT) {
             drive.update(0, 0.4, 0);
         }
         sleep(500);
         drive.stop();
+        liftMotor.setPower(-0.5);
+        sleep(1400);
+        liftMotor.setPower(0);
 
         // Drive forward
-        drive.update(0.5, 0, 0);
-        sleep(1000);
+        drive.update(-0.25, 0, 0);
+        sleep(1500);
         drive.stop();
 
         // Release the block
         servo1.setPosition(180 / SERVO_DEGREES);
         servo2.setPosition(180 / SERVO_DEGREES);
-        sleep(100);
+        sleep(500);
 
         // Go backward
-        drive.update(-0.5, 0, 0);
-        sleep(500);
+        drive.update(0.10, 0, 0);
+        sleep(1000);
         drive.stop();
 
         // Close the arms
@@ -261,14 +301,13 @@ public class PanicAutonomousBase extends LinearOpMode {
         servo2.setPosition(0 / SERVO_DEGREES);
 
         // Go and ram
-        drive.update(0.5, 0, 0);
-        sleep(1000);
+        drive.update(-0.20, 0, 0);
+        sleep(900);
 
         // Go back again
-        drive.update(-0.5, 0 , 0);
-        sleep(500);
+        drive.update(0.20, 0 , 0);
+        sleep(450);
         drive.stop();
-        */
 
     }
 

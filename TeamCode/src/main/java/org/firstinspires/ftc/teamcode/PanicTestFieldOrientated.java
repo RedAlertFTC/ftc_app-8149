@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -28,7 +29,8 @@ public class PanicTestFieldOrientated extends OpMode {
             motorRightA,
             motorRightB,
 
-    liftMotor;
+    liftMotor,
+    relicArm;
     double temp, gyro,
             x,
             y;
@@ -45,6 +47,7 @@ public class PanicTestFieldOrientated extends OpMode {
     boolean lastYInput = false, thisYInput = false;
     boolean gyroModeXP = false;
     Servo servo1, servo2, jewelSensorArm;
+    CRServo relicGrabber;
     Orientation angles;
 
     boolean fieldOrient = true;
@@ -82,6 +85,10 @@ public class PanicTestFieldOrientated extends OpMode {
 
         jewelSensorArm = hardwareMap.servo.get("Jewel Arm Servo");
 
+        relicArm = hardwareMap.dcMotor.get("Relic Arm");
+        relicArm.setDirection(DcMotor.Direction.REVERSE);
+        relicGrabber = hardwareMap.crservo.get("Relic Grabber");
+        relicGrabber.setDirection(CRServo.Direction.REVERSE);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -100,25 +107,37 @@ public class PanicTestFieldOrientated extends OpMode {
         thisAInput = gamepad2.a;
         thisYInput = gamepad2.y;
 
-        liftMotor.setPower(-gamepad2.left_stick_y / 2);
 
-        if (thisAInput && lastAInput) {
-            servo1.setPosition(0 / SERVO_DEGREES);
-            servo2.setPosition(0 / SERVO_DEGREES);
-        } else if (thisAInput ^ !lastAInput) { // ^ is an XOR (or eXclusive-OR) for booleans. Very useful!
+        liftMotor.setPower(-gamepad2.left_stick_y * 0.75);
+
+        if (thisAInput && !lastAInput) {
             servo1.setPosition(180 / SERVO_DEGREES);
             servo2.setPosition(180 / SERVO_DEGREES);
+        } else if (thisAInput ^ lastAInput) { // ^ is an XOR (or eXclusive-OR) for booleans. Very useful!
+            servo1.setPosition(0 / SERVO_DEGREES);
+            servo2.setPosition(0 / SERVO_DEGREES);
         }
 
-        if (thisYInput && lastYInput) {
+        if (gamepad2.right_bumper) {
+            relicArm.setPower((gamepad2.left_bumper ? -gamepad2.right_trigger : gamepad2.right_trigger) * 0.25); // Basically this is an integrated
+        }
+
+        if (gamepad2.dpad_up) {
+            relicGrabber.setPower(1);
+
+        } else if (gamepad2.dpad_down) {
+            relicGrabber.setPower(-1);
+        }
+
+        if (thisYInput && !lastYInput) {
             if (jewelSensorArm.getPosition() == 0) {
                 jewelSensorArm.setPosition(0.8);
             } else {
                 jewelSensorArm.setPosition(0);
             }
         }
-        lastAInput = !thisAInput;
-        lastYInput = !thisYInput;
+        lastAInput = thisAInput;
+        lastYInput = thisYInput;
 
         velocityDrive = gamepad1.left_stick_y * 0.75f;
         strafeDrive = -gamepad1.left_stick_x * 0.75f;
