@@ -125,30 +125,6 @@ public class PanicAutonomousBase extends LinearOpMode {
         sleep(500);
         gemSensorArm.setPosition(0 / SERVO_DEGREES);
         sleep(350);
-//        if (false) {
-//            // Step 1d. Try to get on the triangle
-//            if (currentTeam == red) {
-//                if (currentProgramType == near) {
-//                    drive.update(-0.05, -0.25, 0);
-//                    sleep(6000);
-//                    drive.stop();
-//                } else if (currentProgramType == far) {
-//                    drive.update(0.05, -0.25, 0);
-//                    sleep(6000);
-//                    drive.stop();
-//                }
-//            } else if (currentTeam == blue) {
-//                if (currentProgramType == near) {
-//                    drive.update(-0.05, 0.25, 0);
-//                    sleep(6000);
-//                    drive.stop();
-//                } else if (currentProgramType == far) {
-//                    drive.update(0.05, 0.25, 0);
-//                    sleep(6000);
-//                    drive.stop();
-//                }
-//            }
-//        }
 
 
         drive.update(-0.3, 0, 0);
@@ -166,71 +142,9 @@ public class PanicAutonomousBase extends LinearOpMode {
         sleep(100);
 
         drive.update(0.25, 0, 0);
-        sleep(2000);
-        drive.stop();
-        
-        // Step 2a. Find the VuMark
-        if ((currentProgramType == near && currentTeam == red) || (currentProgramType == far && currentTeam == blue)) {
-            drive.update(0, 0, -0.3);
-            sleep(2200);
-            drive.stop();
-            sleep(1500);
-            do {
-                drive.update(0, 0, -0.3); // TODO: Test
-                telemetry.addData("vuMark", RelicRecoveryVuMark.from(relicTemplate));
-                telemetry.update();
-                sleep(400);
-                drive.stop();
-                sleep(1250);
-            }
-            while (RelicRecoveryVuMark.from(relicTemplate) == RelicRecoveryVuMark.UNKNOWN && opModeIsActive());
-        } else if ((currentProgramType == far && currentTeam == red) || (currentProgramType == near && currentTeam == blue)) {
-            drive.update(0, 0, 0.3);
-            sleep(2200);
-            drive.stop();
-            sleep(1500);
-            do {
-                drive.update(0, 0, 0.3); // TODO: Test
-                telemetry.addData("vuMark", RelicRecoveryVuMark.from(relicTemplate));
-                telemetry.update();
-                sleep(400);
-                drive.stop();
-                sleep(1250);
-            }
-            while (RelicRecoveryVuMark.from(relicTemplate) == RelicRecoveryVuMark.UNKNOWN && opModeIsActive());
-        }
         drive.stop();
 
-        // Step 2b. Record VuMark
 
-        detectedVuMark = RelicRecoveryVuMark.from(relicTemplate);
-        telemetry.addLine();
-        telemetry.addData("detectedVuMark", detectedVuMark);
-        telemetry.update();
-
-
-        // Step 2c. Figure out where to go
-
-        if (currentTeam == red) {
-            if (currentProgramType == near) {
-                whereWeNeedToGo.translate(-108.93f, -596.84f, -822.89f);
-                whereWeNeedToGo.rotate(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES, -4, -13, 84);
-            } else if (currentProgramType == far) {
-                whereWeNeedToGo.translate(-42.54f, -351.17f, -787.79f);
-                whereWeNeedToGo.rotate(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES, 4, -2, -95);
-            }
-        } else if (currentTeam == blue) {
-            if (currentProgramType == near) {
-                whereWeNeedToGo.translate(-56.24f, -705.93f, -952.24f);
-                whereWeNeedToGo.rotate(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES, 40, -89, -132);
-            } else if (currentProgramType == far) {
-                whereWeNeedToGo.translate(18.92f, 295.35f, -1135.27f);
-                whereWeNeedToGo.rotate(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES, 4, -31, -97);
-            }
-        }
-        sleep(5000);
-        sleep(500);
-        drive.stop();
         liftMotor.setPower(-0.5);
         sleep(1400);
         liftMotor.setPower(0);
