@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.utils.MecanumDrive;
 
@@ -24,9 +22,6 @@ public class PanicAutonomousBase extends LinearOpMode {
     ColorSensor gemSensor;
     teamColor currentTeam, detectedBall;
     programType currentProgramType;
-    RelicRecoveryVuMark detectedVuMark = RelicRecoveryVuMark.UNKNOWN;
-
-    OpenGLMatrix whereWeAre = new OpenGLMatrix(), whereWeNeedToGo = new OpenGLMatrix();
 
     @Override
     public void runOpMode() throws InterruptedException {
