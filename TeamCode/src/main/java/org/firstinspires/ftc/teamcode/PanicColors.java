@@ -4,10 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-/**
- * Created by thebiteffect on 11/13/17.
- */
-
 @Autonomous(name = "PanicDEBUG: COLORS!!!", group = "PanicDebug")
 public class PanicColors extends OpMode {
 

@@ -13,11 +13,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-/**
- * Created by thebiteffect on 9/23/17.
- */
-
-
 @TeleOp(name = "Panic: Field Orientated", group = "PanicDEBUG")
 public class PanicTestFieldOrientated extends OpMode {
 
@@ -72,7 +67,7 @@ public class PanicTestFieldOrientated extends OpMode {
         motorLeftA.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorLeftB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         powerRightA = 0;
         powerRightB = 0;

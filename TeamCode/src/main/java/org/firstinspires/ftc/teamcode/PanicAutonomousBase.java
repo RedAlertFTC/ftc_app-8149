@@ -5,12 +5,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.utils.MecanumDrive;
 
 import static org.firstinspires.ftc.teamcode.PanicAutonomousBase.programType.far;
@@ -51,36 +48,21 @@ public class PanicAutonomousBase extends LinearOpMode {
 //        drive.motorLeftA = hardwareMap.dcMotor.get("motorLeftA");
 //        drive.motorLeftB = hardwareMap.dcMotor.get("motorLeftB");
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
-        parameters.vuforiaLicenseKey = "KeyHere";
-
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        vuforia = ClassFactory.createVuforiaLocalizer(parameters); // Create the Vuforia instance.
-
-        VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // could possibly help in debugging
         servo1.setPosition(0 / SERVO_DEGREES);
         servo2.setPosition(0 / SERVO_DEGREES);
 
         waitForStart(); // Wait for the start
 
-
-        // Start viewforia!
-        relicTrackables.activate();
-
         // Step 1a. Lower the arm.
-        gemSensorArm.setPosition(160 / SERVO_DEGREES);
-        sleep(2000);
+        gemSensorArm.setPosition(165 / SERVO_DEGREES);
+        sleep(1000);
 
         servo1.setPosition(180 / SERVO_DEGREES);
         servo2.setPosition(180 / SERVO_DEGREES);
         sleep(200);
 
         liftMotor.setPower(0.5);
-        sleep(4000);
+        sleep(3000);
         liftMotor.setPower(0);
         sleep(500);
         // Step 1b. Figure out the color of the ball on the left side.
@@ -99,82 +81,110 @@ public class PanicAutonomousBase extends LinearOpMode {
 
         if (detectedBall != null) {
             if (detectedBall == currentTeam) {
-                drive.update(0, 0, 0.5);
-                sleep(200);
-                drive.update(0, 0, 0.20);
-                sleep(300);
-                drive.update(0, 0, -0.20);
+                drive.update(0, 0, 0.25);
                 sleep(300);
                 drive.stop();
+                sleep(100);
+                drive.update(0, 0, -0.25);
                 sleep(250);
+                drive.stop();
             } else if (detectedBall != currentTeam) {
-                drive.update(0, 0, -0.5);
-                sleep(200);
-                drive.update(0, 0, -0.20);
-                sleep(300);
-                drive.update(0, 0, 0.20);
+                drive.update(0, 0, -0.25);
                 sleep(300);
                 drive.stop();
+                sleep(100);
+                drive.update(0, 0, 0.25);
                 sleep(250);
+                drive.stop();
             }
         } else {
             // do nothing
         }
-        sleep(1000);
+        sleep(250);
         gemSensorArm.setPosition(20 / SERVO_DEGREES);
         sleep(500);
         gemSensorArm.setPosition(0 / SERVO_DEGREES);
-        sleep(350);
 
-
-        drive.update(-0.3, 0, 0);
-        sleep(1500);
-        drive.stop();
-        sleep(100);
-
-        if (currentTeam == red) {
-            drive.update(0, 0.4, 0);
+        if (currentTeam == red && currentProgramType == far) {
+            drive.update(0, 0, 0);
+        } else if (currentTeam == red && currentProgramType == near) {
+            drive.update(-0.28, 0, 0);
         } else if (currentTeam == blue) {
-            drive.update(0, -0.4, 0);
+            drive.update(-0.27, 0, 0);
         }
-        sleep(2100);
+        sleep(1400);
         drive.stop();
         sleep(100);
 
-        drive.update(0.25, 0, 0);
-        drive.stop();
+        if (currentTeam == red && currentProgramType == far) {
+            drive.update(0, 0.25, 0);
+        } else if (currentTeam == red && currentProgramType == near) {
+            drive.update(0, 0.27, 0);
+        } else if (currentTeam == blue && currentProgramType == far) {
+            drive.update(0, -0.35, 0);
+        } else if (currentTeam == blue && currentProgramType == near) {
+            drive.update(0, -0.32, 0);
+        }
 
+        sleep(2300);
+        drive.stop();
+        sleep(100);
+
+        if (currentTeam == blue) {
+            drive.update(0.30, 0.0, 0.0);
+            sleep(1350);
+            drive.stop();
+
+        } else if (currentTeam == red) {
+            drive.update(0.30, 0, 0);
+            sleep(800);
+            drive.stop();
+        }
+        //Move to the center column
+        if (currentProgramType == near) {
+            drive.update(0.0, 0, currentTeam == red ? -0.25 : 0.25);
+            sleep(5000);
+            drive.stop();
+        }
+
+        if (currentProgramType == far) {
+            drive.update(0.0, 0, currentTeam == red ? -0.25 : 0.25);
+            sleep(3900);
+            drive.stop();
+        }
 
         liftMotor.setPower(-0.5);
-        sleep(1400);
+        sleep(2400);
         liftMotor.setPower(0);
 
         // Drive forward
         drive.update(-0.25, 0, 0);
-        sleep(1500);
+        sleep(1800);
         drive.stop();
 
         // Release the block
-        servo1.setPosition(180 / SERVO_DEGREES);
-        servo2.setPosition(180 / SERVO_DEGREES);
-        sleep(500);
-
-        // Go backward
-        drive.update(0.10, 0, 0);
-        sleep(1000);
-        drive.stop();
-
-        // Close the arms
         servo1.setPosition(0 / SERVO_DEGREES);
         servo2.setPosition(0 / SERVO_DEGREES);
+        sleep(1000);
+
+        // Go backward
+        drive.update(0.20, 0, 0);
+        sleep(1200);
+        drive.stop();
+        sleep(200);
+//        // Close the arms
+        servo1.setPosition(180 / SERVO_DEGREES);
+        servo2.setPosition(180 / SERVO_DEGREES);
+        sleep(250);
 
         // Go and ram
-        drive.update(-0.20, 0, 0);
-        sleep(900);
+        drive.update(-0.25, 0, 0);
+        sleep(1600);
+        drive.stop();
 
         // Go back again
-        drive.update(0.20, 0 , 0);
-        sleep(450);
+        drive.update(0.15, 0, 0);
+        sleep(750);
         drive.stop();
 
     }
