@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -17,6 +18,7 @@ public class PanicAutonomousBase extends LinearOpMode {
     static double SERVO_DEGREES = 180;
     MecanumDrive drive = new MecanumDrive();
     DcMotor liftMotor;
+    LED leds;
     VuforiaLocalizer vuforia;
     Servo servo1, servo2, gemSensorArm;
     ColorSensor gemSensor;
@@ -37,6 +39,9 @@ public class PanicAutonomousBase extends LinearOpMode {
         servo2.setDirection(Servo.Direction.REVERSE);
 
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
+
+        leds = hardwareMap.led.get("led");
+        leds.enable(true);
 
 //        drive.motorRightA = hardwareMap.dcMotor.get("motorRightA");
 //        drive.motorRightB = hardwareMap.dcMotor.get("motorRightB");
@@ -104,39 +109,59 @@ public class PanicAutonomousBase extends LinearOpMode {
             drive.update(0, 0, 0);
         } else if (currentTeam == red && currentProgramType == near) {
             drive.update(-0.28, 0, 0);
-        } else if (currentTeam == blue) {
-            drive.update(-0.27, 0, 0);
+        } else if (currentTeam == blue && currentProgramType == near) {
+            drive.update(-0.23, 0, 0);
+        }
+        else if (currentTeam == red && currentProgramType == near) {
+            drive.update(0.0, 0, 0);
         }
         sleep(1400);
         drive.stop();
         sleep(100);
 
         if (currentTeam == red && currentProgramType == far) {
-            drive.update(0, 0.25, 0);
+            drive.update(0, 0.40, 0);
         } else if (currentTeam == red && currentProgramType == near) {
-            drive.update(0, 0.27, 0);
+            drive.update(0, 0.32, 0);
         } else if (currentTeam == blue && currentProgramType == far) {
-            drive.update(0, -0.35, 0);
+            drive.update(0, -0.38, 0);
         } else if (currentTeam == blue && currentProgramType == near) {
-            drive.update(0, -0.32, 0);
+            drive.update(0, -0.365, 0);
         }
 
         sleep(2300);
         drive.stop();
         sleep(100);
 
-        if (currentTeam == blue) {
+        if (currentTeam == blue && currentProgramType == near) {
             drive.update(0.30, 0.0, 0.0);
-            sleep(1350);
+            sleep(850);
             drive.stop();
 
-        } else if (currentTeam == red) {
+        }
+        else if (currentTeam == blue && currentProgramType == far) {
+            drive.update(0.16, 0, 0);
+            sleep(800);
+            drive.stop();
+        }
+        else if (currentTeam == red && currentProgramType == near) {
             drive.update(0.30, 0, 0);
             sleep(800);
             drive.stop();
         }
+        else if (currentTeam == red && currentProgramType == far) {
+            drive.update(0.6, 0, 0);
+            sleep(800);
+            drive.stop();
+        }
         //Move to the center column
-        if (currentProgramType == near) {
+        if (currentProgramType == near && currentTeam == red) {
+            drive.update(0.0, 0, currentTeam == red ? -0.25 : 0.25);
+            sleep(5250);
+            drive.stop();
+        }
+
+        if (currentProgramType == near && currentTeam == blue) {
             drive.update(0.0, 0, currentTeam == red ? -0.25 : 0.25);
             sleep(5000);
             drive.stop();
@@ -144,23 +169,23 @@ public class PanicAutonomousBase extends LinearOpMode {
 
         if (currentProgramType == far) {
             drive.update(0.0, 0, currentTeam == red ? -0.25 : 0.25);
-            sleep(3900);
+            sleep(4100);
             drive.stop();
         }
 
         liftMotor.setPower(-0.5);
-        sleep(2400);
+        sleep(1800);
         liftMotor.setPower(0);
 
         // Drive forward
         drive.update(-0.25, 0, 0);
-        sleep(1800);
+        sleep(2000);
         drive.stop();
 
         // Release the block
         servo1.setPosition(0 / SERVO_DEGREES);
         servo2.setPosition(0 / SERVO_DEGREES);
-        sleep(1000);
+        sleep(750);
 
         // Go backward
         drive.update(0.20, 0, 0);

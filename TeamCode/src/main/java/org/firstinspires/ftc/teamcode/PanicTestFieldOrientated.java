@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -26,6 +27,7 @@ public class PanicTestFieldOrientated extends OpMode {
 
     liftMotor,
     relicArm;
+    LED leds;
     double temp, gyro,
             x,
             y;
@@ -56,6 +58,9 @@ public class PanicTestFieldOrientated extends OpMode {
         motorLeftB = hardwareMap.dcMotor.get("motorLeftB");
 
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
+
+        leds = hardwareMap.led.get("led");
+        leds.enable(true);
 
         motorRightA.setDirection(DcMotor.Direction.REVERSE);
         motorRightB.setDirection(DcMotor.Direction.REVERSE);
