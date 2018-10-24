@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class PanicAutonomousBluOne extends PanicAutonomousBase {
     @Override
     public void runOpMode() throws InterruptedException {
-        currentTeam = teamColor.blue;
-        currentProgramType = programType.near;
+        currentTeam = TeamColor.blue;
+        currentProgramType = ProgramType.near;
         super.runOpMode();
     }
 }
