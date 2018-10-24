@@ -23,7 +23,7 @@ public class CollectionSystem {
      */
     public double CollectionSpeed;
 
-    /* FIXME: initialize this. It should be positive.
+    /* FIXME: initialize this. It should be positive. Make
     * This is a constant; it would be a macro if Java had a preprocessor. */
     public double UsualSpeed;
 
@@ -40,7 +40,7 @@ public class CollectionSystem {
     /* I don't know if I'm doing this right.  I'm basically doing whatever was
      * in utils/MecanumDrive.java.
      */
-    public void InitMotor(HardwareMap HardwareMap) {
+    public void initMotor(HardwareMap HardwareMap) {
         /* I think that thebiteffect did this part wrong; they didn't actually
         use the strings they got from the constructor, assuming the defaults.
          */
@@ -52,20 +52,20 @@ public class CollectionSystem {
         CollectionSpeed = 0;
     }
 
-    public void SetSpeed(double NewSpeed) {
+    public void setSpeed(double NewSpeed) {
         CollectionMotor.setPower(NewSpeed);
         CollectionSpeed = NewSpeed;
     }
 
-    public void Collect() {
-        SetSpeed(UsualSpeed);
+    public void collect() {
+        setSpeed(UsualSpeed);
     }
 
-    public void Eject() {
-        SetSpeed(-UsualSpeed);
+    public void eject() {
+        setSpeed(-UsualSpeed);
     }
 
-    public void Stop() {
-        SetSpeed(0);
+    public void stop() {
+        setSpeed(0);
     }
 }
