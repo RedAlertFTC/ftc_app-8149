@@ -40,12 +40,12 @@ public class PanicTestFieldOrientated extends OpMode {
 
         velocityDrive = gamepad1.left_stick_y * 0.75f;
         strafeDrive = -gamepad1.left_stick_x * 0.75f;
-        rotationDrive = -gamepad1.right_stick_x * 0.75f;
+        rotationDrive = gamepad1.right_stick_x * 0.75f;
 
         x = strafeDrive;
         y = velocityDrive;
-        gyro = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-
+        /*gyro = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+*/
         telemetry.addData("x", x);
         telemetry.addData("y", y);
         telemetry.addData("gyro", gyro);
@@ -59,8 +59,10 @@ public class PanicTestFieldOrientated extends OpMode {
             y = temp;
         }
 
+        /* cut out for debug
         strafeDrive = (float) x;
         velocityDrive = (float) y;
+        */
 
         drive.update(
                 velocityDrive * (1 - ((double) gamepad1.left_trigger * 0.7)),
