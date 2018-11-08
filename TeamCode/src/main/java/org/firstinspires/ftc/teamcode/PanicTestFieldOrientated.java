@@ -44,22 +44,23 @@ public class PanicTestFieldOrientated extends OpMode {
 
         x = strafeDrive;
         y = velocityDrive;
-        /*gyro = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-*/
+	    /* So we don't have a gyro, so... no. */
+        /*gyro = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;*/
+	 
         telemetry.addData("x", x);
         telemetry.addData("y", y);
-        telemetry.addData("gyro", gyro);
+        /*telemetry.addData("gyro", gyro);*/
         telemetry.addData("velocityDrive", velocityDrive);
         telemetry.addData("strafeDrive", strafeDrive);
         telemetry.addData("rotationDrive", rotationDrive);
 
+	    /*
         if (fieldOrient) {
             temp = y * Math.toDegrees(Math.cos(Math.toRadians(gyro)) + x * Math.toDegrees(Math.sin(Math.toRadians(gyro))));
             x = -y * Math.toDegrees(Math.sin(Math.toRadians(gyro)) + x * Math.toDegrees(Math.cos(Math.toRadians(gyro))));
             y = temp;
         }
 
-        /* cut out for debug
         strafeDrive = (float) x;
         velocityDrive = (float) y;
         */
