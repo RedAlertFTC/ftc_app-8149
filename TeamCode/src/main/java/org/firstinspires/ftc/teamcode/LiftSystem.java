@@ -28,17 +28,18 @@ public class LiftSystem {
     }
 
     public LiftSystem(double liftSpeed, int minimumPosition, int maximumPosition) {
-        this(liftSpeed, minimumPosition, maximumPosition, "motorName");
+        this(liftSpeed, minimumPosition, maximumPosition, "motorLift");
     }
 
     public LiftSystem() {
-        this(1, 0, 288);
+        this(1, 0, 288 * 10);
     }
 
     public void initMotor(HardwareMap hardwareMap) {
         liftMotor = hardwareMap.dcMotor.get(liftMotorName);
 
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
