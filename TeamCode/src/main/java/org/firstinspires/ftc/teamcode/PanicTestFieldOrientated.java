@@ -40,13 +40,15 @@ public class PanicTestFieldOrientated extends OpMode {
 
         velocityDrive = gamepad1.left_stick_y * 0.75f;
         strafeDrive = -gamepad1.left_stick_x * 0.75f;
-        rotationDrive = gamepad1.right_stick_x * 0.75f;
+        rotationDrive = -gamepad1.right_stick_x * 0.75f;
 
         x = strafeDrive;
         y = velocityDrive;
-	    /* So we don't have a gyro, so... no. */
-        /*gyro = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;*/
-	 
+
+        /* So we don't have a gyro, so... no. */
+        /* Actually we do, it's in the hub... */
+        gyro = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+
         telemetry.addData("x", x);
         telemetry.addData("y", y);
         /*telemetry.addData("gyro", gyro);*/
@@ -54,7 +56,7 @@ public class PanicTestFieldOrientated extends OpMode {
         telemetry.addData("strafeDrive", strafeDrive);
         telemetry.addData("rotationDrive", rotationDrive);
 
-	    /*
+	    /* Add the end of a block comment next time... */
         if (fieldOrient) {
             temp = y * Math.toDegrees(Math.cos(Math.toRadians(gyro)) + x * Math.toDegrees(Math.sin(Math.toRadians(gyro))));
             x = -y * Math.toDegrees(Math.sin(Math.toRadians(gyro)) + x * Math.toDegrees(Math.cos(Math.toRadians(gyro))));
@@ -63,7 +65,6 @@ public class PanicTestFieldOrientated extends OpMode {
 
         strafeDrive = (float) x;
         velocityDrive = (float) y;
-        */
 
         drive.update(
                 velocityDrive * (1 - ((double) gamepad1.left_trigger * 0.7)),
