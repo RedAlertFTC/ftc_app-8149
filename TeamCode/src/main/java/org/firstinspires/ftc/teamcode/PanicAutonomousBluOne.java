@@ -11,7 +11,7 @@ public class PanicAutonomousBluOne extends PanicAutonomousBase {
     @Override
     public void runOpMode() throws InterruptedException {
         currentTeam = TeamColor.blue;
-        currentProgramType = ProgramType.near;
+        currentProgramType = ProgramType.depot;
         super.runOpMode();
     }
 }

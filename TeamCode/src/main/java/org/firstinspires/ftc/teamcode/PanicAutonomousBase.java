@@ -26,7 +26,7 @@ LiftSystem lift = new LiftSystem();
 
     enum TeamColor {red, blue}
 
-    enum ProgramType {near, far}
+    enum ProgramType {depot, crater}
 
 
 }
