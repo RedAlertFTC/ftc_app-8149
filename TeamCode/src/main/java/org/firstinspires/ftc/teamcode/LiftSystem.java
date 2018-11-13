@@ -15,6 +15,7 @@ public class LiftSystem {
     /* Specify for now that this is the one that actually collects, in case we
     control multiple motors with this class. */
     /* This is supposedly a motor ¯\_(ツ)_/¯ */
+    /* ^ Actually a vex motor*/
     public DcMotor liftMotor;
     public String liftMotorName;
     /* Used to remember what the motor speed was before turning it off */
