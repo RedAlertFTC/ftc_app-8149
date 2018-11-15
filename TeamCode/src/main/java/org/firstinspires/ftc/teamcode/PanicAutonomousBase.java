@@ -10,6 +10,7 @@ public class PanicAutonomousBase extends LinearOpMode {
     TeamColor currentTeam;
     ProgramType currentProgramType;
     OpenGLMatrix whereWeAre = new OpenGLMatrix(), whereWeNeedToGo = new OpenGLMatrix();
+    /* This might change, as we might combine the collection and lift arms. */
 LiftSystem lift = new LiftSystem();
     private MecanumDrive drive1;
     private MecanumDrive mecanumDrive;
@@ -23,11 +24,11 @@ LiftSystem lift = new LiftSystem();
         /* Landing */
         lift.extend();
         sleep(6750);
-        drive.update(0,1, 0);
+        drive.update(0, 0,25, 0);
         sleep(100); /* FIXME: probably way off */
         drive.stop();
 
-        /* Claim */
+        /* Claim: go to the depot. */
         /* I have no idea what the numbers should be so I'm commenting it all
         out.  It seem like .3 is a typical drive speed, but I don't know.
         if (currentProgramType == ProgramType.depot) {
@@ -47,6 +48,33 @@ LiftSystem lift = new LiftSystem();
         }
         And we don't have this system built yet, so we can't do anything here.
          */
+        /* From now on we probably won't need to check currentProgramType any
+         * more because we will be in the same place now: at the depot. */
+
+        /* Claim: drop the marker. */
+
+        /* Now sampling.  Ideally we vould be able to pass flags at invocation
+         * time to specify what sampling we are doing depending on what the
+         * other team does, but is seems that Java runtime does not support
+         * that in any convenient way. */
+
+        /* Sampling 1: drive to the first sampling place. */
+
+        /* Sampling 1: go until we find the gold mineral. */
+
+        /* Sampling 1: do something to the mineral.  Will we pick it up or just
+         * bump it? */
+
+        /* Sampling 2: drive to the second sampling place. */
+
+        /* Sampling 2: go until we find the gold mineral */
+
+        /* Sampling 2: do something to the mineral. */
+
+        /* If we picked up a mineral, maybe we could put it in the depot or
+         * the cargo hold. */
+
+        /* Is that all? */
     }
 
     enum TeamColor {red, blue}
