@@ -19,9 +19,34 @@ LiftSystem lift = new LiftSystem();
         drive.InitMotors(hardwareMap); // Init drive train
         lift.initMotor(hardwareMap);
         waitForStart(); // Wait for the start
+
+        /* Landing */
         lift.extend();
         sleep(6750);
         drive.update(0,1, 0);
+        sleep(100); /* FIXME: probably way off */
+        drive.stop();
+
+        /* Claim */
+        /* I have no idea what the numbers should be so I'm commenting it all
+        out.  It seem like .3 is a typical drive speed, but I don't know.
+        if (currentProgramType == ProgramType.depot) {
+            drive.update(-0.3, 0, 0);
+            sleep(FIXME);
+            Do we need to turn around?
+            drive.stop();
+        } else {
+            drive.update(-0.3, 0, 0);
+            sleep(FIXME);
+            drive.update(0, 0, 0.3);
+            sleep(FIXME);
+            drive.update(0.3, 0, 0);
+            sleep(FIXME);
+            Do we need to turn around?
+            drive.stop();
+        }
+        And we don't have this system built yet, so we can't do anything here.
+         */
     }
 
     enum TeamColor {red, blue}
