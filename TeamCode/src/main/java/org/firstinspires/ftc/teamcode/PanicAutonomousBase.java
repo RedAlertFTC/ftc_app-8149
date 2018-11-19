@@ -21,17 +21,17 @@ public class PanicAutonomousBase extends LinearOpMode {
         /* Landing */
         lift.extend();
         sleep(6750);
-        drive.update(0, 0,25, 0);
+        drive.update(0, 0.25, 0);
         sleep(100); /* FIXME: probably way off */
         drive.stop();
 
         /* Claim: go to the depot. */
         /* I have no idea what the numbers should be so I'm commenting it all
-        out.  It seem like .3 is a typical drive speed, but I don't know.
+        out.  It seem like .3 is a typical drive speed, but I don't know. */
         if (currentProgramType == ProgramType.depot) {
             drive.update(-0.3, 0, 0);
             sleep(FIXME);
-            Do we need to turn around?
+            /*  Do we need to turn around? */
             drive.stop();
         } else {
             drive.update(-0.3, 0, 0);
@@ -40,12 +40,11 @@ public class PanicAutonomousBase extends LinearOpMode {
             sleep(FIXME);
             drive.update(0.3, 0, 0);
             sleep(FIXME);
-            Do we need to turn around?
+            /*  Do we need to turn around? */
             drive.stop();
         }
-        And we don't have this system built yet, so we can't do anything here.
-         */
-        /* From now on we probably won't need to check currentProgramType any
+        /* And we don't have this system built yet, so we can't do anything here.
+         * From now on we probably won't need to check currentProgramType any
          * more because we will be in the same place now: at the depot. */
 
         /* Claim: drop the marker. */
