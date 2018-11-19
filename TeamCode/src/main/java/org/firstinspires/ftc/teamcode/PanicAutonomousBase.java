@@ -2,18 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.teamcode.utils.MecanumDrive;
 
 public class PanicAutonomousBase extends LinearOpMode {
     MecanumDrive drive = new MecanumDrive();
     TeamColor currentTeam;
     ProgramType currentProgramType;
-    OpenGLMatrix whereWeAre = new OpenGLMatrix(), whereWeNeedToGo = new OpenGLMatrix();
+    // OpenGLMatrix whereWeAre = new OpenGLMatrix(), whereWeNeedToGo = new OpenGLMatrix();
     /* This might change, as we might combine the collection and lift arms. */
-LiftSystem lift = new LiftSystem();
-    private MecanumDrive drive1;
-    private MecanumDrive mecanumDrive;
+    LiftSystem lift = new LiftSystem();
 
     @Override
     public void runOpMode() throws InterruptedException {
