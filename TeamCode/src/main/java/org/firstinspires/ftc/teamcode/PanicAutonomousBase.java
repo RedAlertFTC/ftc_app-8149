@@ -11,6 +11,7 @@ public class PanicAutonomousBase extends LinearOpMode {
     // OpenGLMatrix whereWeAre = new OpenGLMatrix(), whereWeNeedToGo = new OpenGLMatrix();
     /* This might change, as we might combine the collection and lift arms. */
     LiftSystem lift = new LiftSystem();
+    long FIXME = 0; // for error free builds!
 
     @Override
     public void runOpMode() throws InterruptedException {
