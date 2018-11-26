@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -14,25 +15,28 @@ public class CollectionSystem {
     /* Specify for now that this is the one that actually collects, in case we
     control multiple motors with this class. */
     /* Is this a DC Motor? Probably. */
-    public DcMotor CollectionMotor;
-    public String CollectionMotorName;
+    public CRServo CollectionServoL;
+    public String CollectionServoLName;
+    public CRServo CollectionServoR;
+    public String CollectionServoRName;
+
+    /* FIXME: initialize this. It should be positive. Make
+     * This is a constant; it would be a macro if Java had a preprocessor. */
+    public double UsualSpeed;
 
     /* Why make it double?  I don't know.  I felt like it. */
     /* This variable is not really used; it jus follows the speed of the motor
      * in case someone wants to look at it.  Is this necessary?
      */
-    public double CollectionSpeed;
+    public double CollectionSpeed = UsualSpeed;
 
-    /* FIXME: initialize this. It should be positive. Make
-    * This is a constant; it would be a macro if Java had a preprocessor. */
-    public double UsualSpeed;
-
-    public CollectionSystem(String MotorName) {
-        CollectionMotorName = MotorName;
+    public CollectionSystem(String MotorLName, String MotorRName) {
+        CollectionServoLName = MotorLName;
+        CollectionServoRName = MotorRName;
     }
 
     public CollectionSystem() {
-        new CollectionSystem("motorCollection");
+        new CollectionSystem("servoCollectionL", "servoCollectionR");
         /* Should InitMotor be called here? */
     }
 
@@ -44,25 +48,27 @@ public class CollectionSystem {
         /* I think that thebiteffect did this part wrong; they didn't actually
         use the strings they got from the constructor, assuming the defaults.
          */
-        CollectionMotor = HardwareMap.dcMotor.get(CollectionMotorName);
+        CollectionServoL = HardwareMap.crservo.get(CollectionServoLName);
+        CollectionServoR = HardwareMap.crservo.get(CollectionServoRName);
 
-        CollectionMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        CollectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        CollectionServoL.setDirection(DcMotor.Direction.FORWARD);
+        CollectionServoR.setDirection(DcMotor.Direction.FORWARD);
 
         CollectionSpeed = 0;
     }
 
     public void setSpeed(double NewSpeed) {
-        CollectionMotor.setPower(NewSpeed);
         CollectionSpeed = NewSpeed;
+        CollectionServoR.setPower(NewSpeed);
+        CollectionServoL.setPower(NewSpeed);
     }
 
     public void collect() {
-        setSpeed(UsualSpeed);
+        setSpeed(CollectionSpeed);
     }
 
     public void eject() {
-        setSpeed(-UsualSpeed);
+        setSpeed(-CollectionSpeed);
     }
 
     public void stop() {
