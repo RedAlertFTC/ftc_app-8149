@@ -51,8 +51,10 @@ public class PanicAutonomousBase extends LinearOpMode {
          * more because we will be in the same place now: at the depot. */
 
         /* Claim: drop the marker. */
-
-        collection.CollectionMotor.setPower(-1);
+        collection.eject();
+        sleep(1000); /* needs testing */
+        collection.stop();
+	
         /* Now sampling.  Ideally we would be able to pass flags at invocation
          * time to specify what sampling we are doing depending on what the
          * other team does, but is seems that Java runtime does not support
