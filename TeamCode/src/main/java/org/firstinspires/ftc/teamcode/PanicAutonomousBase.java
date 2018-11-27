@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.utils.MecanumDrive;
 
 public class PanicAutonomousBase extends LinearOpMode {
     MecanumDrive drive = new MecanumDrive();
+    CollectionSystem collection = new CollectionSystem();
     TeamColor currentTeam;
     ProgramType currentProgramType;
     // OpenGLMatrix whereWeAre = new OpenGLMatrix(), whereWeNeedToGo = new OpenGLMatrix();
@@ -17,6 +18,7 @@ public class PanicAutonomousBase extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         drive.InitMotors(hardwareMap); // Init drive train
         lift.initMotor(hardwareMap);
+        collection.initMotor(hardwareMap);
         waitForStart(); // Wait for the start
 
         /* Landing */
@@ -50,7 +52,8 @@ public class PanicAutonomousBase extends LinearOpMode {
 
         /* Claim: drop the marker. */
 
-        /* Now sampling.  Ideally we vould be able to pass flags at invocation
+        collection.CollectionMotor.setPower(-1);
+        /* Now sampling.  Ideally we would be able to pass flags at invocation
          * time to specify what sampling we are doing depending on what the
          * other team does, but is seems that Java runtime does not support
          * that in any convenient way. */
@@ -62,6 +65,8 @@ public class PanicAutonomousBase extends LinearOpMode {
         /* Sampling 1: do something to the mineral.  Will we pick it up or just
          * bump it? */
 
+        /* Just bump it*/
+
         /* Sampling 2: drive to the second sampling place. */
 
         /* Sampling 2: go until we find the gold mineral */
@@ -72,6 +77,8 @@ public class PanicAutonomousBase extends LinearOpMode {
          * the cargo hold. */
 
         /* Is that all? */
+
+        /*No, we might want to park halfway in the crater*/
     }
 
     enum TeamColor {red, blue}
