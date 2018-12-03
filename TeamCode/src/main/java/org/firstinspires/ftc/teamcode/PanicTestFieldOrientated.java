@@ -39,7 +39,6 @@ public class PanicTestFieldOrientated extends OpMode {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
     }
 
     @Override
