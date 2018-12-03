@@ -51,7 +51,14 @@ public class CollectionSystem {
         CollectionServoL = HardwareMap.crservo.get(CollectionServoLName);
         CollectionServoR = HardwareMap.crservo.get(CollectionServoRName);
 
-        CollectionServoL.setDirection(DcMotor.Direction.FORWARD);
+        /* To collect, the left wheel must  rotate clockwise and the right
+         * servo would rotate counter-clockwise.  The servos are geared to the
+         * wheels, though, so the left servo must go counter-clockwise and the
+         * right must go clockwise.  Clockwise is *probably* forward and
+         * counter-clockwise is *probably* reverse, since we want a positive
+         * speed to collect, hence this.
+         */
+        CollectionServoL.setDirection(DcMotor.Direction.REVERSE);
         CollectionServoR.setDirection(DcMotor.Direction.FORWARD);
 
         CollectionSpeed = 0;
