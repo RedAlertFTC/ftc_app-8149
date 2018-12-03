@@ -51,9 +51,7 @@ public class PanicAutonomousBase extends LinearOpMode {
          * more because we will be in the same place now: at the depot. */
 
         /* Claim: drop the marker. */
-        collection.eject();
-        sleep(1000); /* needs testing */
-        collection.stop();
+        /* This will likely need a new system in the hardware. */
 	
         /* Now sampling.  Ideally we would be able to pass flags at invocation
          * time to specify what sampling we are doing depending on what the
