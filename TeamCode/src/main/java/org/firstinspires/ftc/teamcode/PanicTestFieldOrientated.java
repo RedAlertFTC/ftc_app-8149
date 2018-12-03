@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.MecanumDrive;
 @TeleOp(name = "Panic: Drive!™", group = "Panic")
 public class PanicTestFieldOrientated extends OpMode {
     MecanumDrive drive = new MecanumDrive();
+    LiftSystem lift = new LiftSystem();
     double temp, gyro,
             x,
             y;
@@ -32,6 +33,8 @@ public class PanicTestFieldOrientated extends OpMode {
     @Override
     public void init() {
         drive.InitMotors(hardwareMap);
+        lift.initMotor(hardwareMap);
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
     }
 
     @Override
@@ -39,7 +42,7 @@ public class PanicTestFieldOrientated extends OpMode {
 
 
         velocityDrive = gamepad1.left_stick_y * 0.75f;
-        strafeDrive = -gamepad1.left_stick_x * 0.75f;
+        strafeDrive = gamepad1.left_stick_x * 0.75f;
         rotationDrive = -gamepad1.right_stick_x * 0.75f;
 
         x = strafeDrive;
@@ -71,6 +74,12 @@ public class PanicTestFieldOrientated extends OpMode {
                 strafeDrive * (1 - ((double) gamepad1.left_trigger * 0.7)),
                 rotationDrive * (1 - ((double) gamepad1.left_trigger * 0.7))
         );
+
+        if (gamepad1.a) {
+            lift.extend();
+        } else {
+            lift.retract();
+        }
 
         telemetry.addData("left_trigger", gamepad1.left_trigger);
     }
