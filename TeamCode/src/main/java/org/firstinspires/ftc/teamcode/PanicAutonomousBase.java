@@ -44,6 +44,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         lift.initMotor(hardwareMap);
 
         drive.setMotorMode(DcMotor.RunMode.RUN_TO_POSITION);
+        collection.initMotor(hardwareMap);
         waitForStart(); // Wait for the start
 
         /* Landing */
@@ -78,6 +79,9 @@ public class PanicAutonomousBase extends LinearOpMode {
         /* Claim: drop the marker. */
 
         /* Now sampling.  Ideally we would be able to pass flags at invocation
+        /* This will likely need a new system in the hardware. */
+
+        /* Now sampling.  Ideally we would be able to pass flags at invocation
          * time to specify what sampling we are doing depending on what the
          * other team does, but is seems that Java runtime does not support
          * that in any convenient way. */
@@ -92,6 +96,10 @@ public class PanicAutonomousBase extends LinearOpMode {
         drive.stop();
         /* Sampling 1: do something to the mineral.  Will we pick it up or just
          * bump it? */
+
+        /* Just bump it*/
+
+        /* Sampling 2: drive to the second sampling place. */
         /* We will... */
         drive.update(1, 0, 0);
         sleep(250);
@@ -116,6 +124,8 @@ public class PanicAutonomousBase extends LinearOpMode {
          * the cargo hold. */
 
         /* Is that all? */
+
+        /*No, we might want to park halfway in the crater*/
     }
 
     enum TeamColor {red, blue}

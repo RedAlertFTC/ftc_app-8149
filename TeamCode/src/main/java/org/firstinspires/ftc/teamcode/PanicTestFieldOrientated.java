@@ -34,6 +34,11 @@ public class PanicTestFieldOrientated extends OpMode {
     public void init() {
         drive.InitMotors(hardwareMap);
         lift.initMotor(hardwareMap);
+
+        /* Why does the gyro have to be so complicated? */
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
         imu = hardwareMap.get(BNO055IMU.class, "imu");
     }
 
@@ -54,7 +59,7 @@ public class PanicTestFieldOrientated extends OpMode {
 
         telemetry.addData("x", x);
         telemetry.addData("y", y);
-        /*telemetry.addData("gyro", gyro);*/
+        telemetry.addData("gyro", gyro);
         telemetry.addData("velocityDrive", velocityDrive);
         telemetry.addData("strafeDrive", strafeDrive);
         telemetry.addData("rotationDrive", rotationDrive);
