@@ -40,11 +40,11 @@ public class PanicAutonomousBase extends LinearOpMode {
 
         detector.enable(); // Start the detector!
 
-        drive.InitMotors(hardwareMap); // Init drive train
-        lift.initMotor(hardwareMap);
+        drive.init(hardwareMap); // Init drive train
+        lift.init(hardwareMap);
 
         drive.setMotorMode(DcMotor.RunMode.RUN_TO_POSITION);
-        collection.initMotor(hardwareMap);
+        collection.init(hardwareMap);
         waitForStart(); // Wait for the start
 
         /* Landing */

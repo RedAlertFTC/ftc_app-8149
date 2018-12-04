@@ -18,7 +18,7 @@ public class PanicTestDriveAlgorithms extends OpMode {
 
     @Override
     public void init() {
-        drive.InitMotors(hardwareMap);
+        drive.init(hardwareMap);
     }
 
     @Override

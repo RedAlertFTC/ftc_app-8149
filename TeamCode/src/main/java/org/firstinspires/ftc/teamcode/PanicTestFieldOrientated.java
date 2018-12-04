@@ -32,8 +32,8 @@ public class PanicTestFieldOrientated extends OpMode {
 
     @Override
     public void init() {
-        drive.InitMotors(hardwareMap);
-        lift.initMotor(hardwareMap);
+        drive.init(hardwareMap);
+        lift.init(hardwareMap);
 
         /* Why does the gyro have to be so complicated? */
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

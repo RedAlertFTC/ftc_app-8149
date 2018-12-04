@@ -36,7 +36,7 @@ public class LiftSystem {
         this(1, 0, 288 * 10);
     }
 
-    public void initMotor(HardwareMap hardwareMap) {
+    public void init(HardwareMap hardwareMap) {
         liftMotor = hardwareMap.dcMotor.get(liftMotorName);
 
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

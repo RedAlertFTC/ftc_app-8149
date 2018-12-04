@@ -11,7 +11,7 @@ public class CollectionSystemArm {
         /*FIXME*/
     }
 
-    public void initMotors() {
+    public void init() {
         /*FIXME*/
     }
 

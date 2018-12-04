@@ -44,7 +44,7 @@ public class CollectionSystem {
     /* I don't know if I'm doing this right.  I'm basically doing whatever was
      * in utils/MecanumDrive.java.
      */
-    public void initMotor(HardwareMap HardwareMap) {
+    public void init(HardwareMap HardwareMap) {
         /* I think that thebiteffect did this part wrong; they didn't actually
         use the strings they got from the constructor, assuming the defaults.
          */
