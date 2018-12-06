@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.disnodeteam.dogecv.CameraViewDisplay;
-import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -22,6 +20,7 @@ public class PanicAutonomousBase extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Set up detector
+        /*
         detector = new GoldAlignDetector(); // Create detector-
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize it with the app context and camera
         detector.useDefaults(); // Set detector to use default settings
@@ -39,7 +38,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-
+        */
         drive.init(hardwareMap); // Init drive train
         lift.init(hardwareMap);
 
@@ -50,82 +49,84 @@ public class PanicAutonomousBase extends LinearOpMode {
         /* Landing */
         lift.extend();
         sleep(6750);
-        drive.updateTarget(0, 0, 0);
-        sleep(100); /* FIXME: probably way off */
-        drive.stop();
-
-        /* Claim: go to the depot. */
-        /* I have no idea what the numbers should be so I'm commenting it all
-        out.  It seem like .3 is a typical drive speed, but I don't know. */
-        if (currentProgramType == ProgramType.depot) {
-            drive.update(-0.3, 0, 0);
-            sleep(FIXME);
-            /*  Do we need to turn around? */
-            drive.stop();
-        } else {
-            drive.update(-0.3, 0, 0);
-            sleep(FIXME);
-            drive.update(0, 0, 0.3);
-            sleep(FIXME);
-            drive.update(0.3, 0, 0);
-            sleep(FIXME);
-            /*  Do we need to turn around? */
-            drive.stop();
-        }
-        /* And we don't have this system built yet, so we can't do anything here.
-         * From now on we probably won't need to check currentProgramType any
-         * more because we will be in the same place now: at the depot. */
-
-        /* Claim: drop the marker. */
-
-        /* Now sampling.  Ideally we would be able to pass flags at invocation
-        /* This will likely need a new system in the hardware. */
-
-        /* Now sampling.  Ideally we would be able to pass flags at invocation
-         * time to specify what sampling we are doing depending on what the
-         * other team does, but is seems that Java runtime does not support
-         * that in any convenient way. */
-
-        /* Sampling 1: drive to the first sampling place. */
-
-        /* Sampling 1: go until we find the gold mineral. */
-        do {
-            drive.update(0, -0.3, 0);
-        } while (!detector.getAligned());
-
-        drive.stop();
-        /* Sampling 1: do something to the mineral.  Will we pick it up or just
-         * bump it? */
-
-        /* Just bump it*/
-
-        /* Sampling 2: drive to the second sampling place. */
-        /* We will... */
-        drive.update(1, 0, 0);
+        drive.update(0, 0.25, 0);
         sleep(250);
         drive.stop();
-        sleep(500);
-        drive.update(-0.5, 0, 0);
-        sleep(500);
-        /* Sampling 2: drive to the second sampling place. IF we are  */
 
-        /* Sampling 2: go until we find the gold mineral */
-        do {
-            drive.update(0, -0.3, 0);
-        } while (!detector.getAligned());
-        /* Sampling 2: do something to the mineral. */
-        drive.update(1, 0, 0);
-        sleep(250);
-        drive.stop();
-        sleep(500);
-        drive.update(-0.5, 0, 0);
-        sleep(500);
-        /* If we picked up a mineral, maybe we could put it in the depot or
-         * the cargo hold. */
 
-        /* Is that all? */
-
-        /*No, we might want to park halfway in the crater*/
+//        /* Claim: go to the depot. */
+//        /* I have no idea what the numbers should be so I'm commenting it all
+//        out.  It seem like .3 is a typical drive speed, but I don't know. */
+//        if (currentProgramType == ProgramType.depot) {
+//            drive.update(-0.3, 0, 0);
+//            sleep(FIXME);
+//            /*  Do we need to turn around? */
+//            drive.stop();
+//        } else {
+//            drive.update(-0.3, 0, 0);
+//            sleep(FIXME);
+//            drive.update(0, 0, 0.3);
+//            sleep(FIXME);
+//            drive.update(0.3, 0, 0);
+//            sleep(FIXME);
+//            /*  Do we need to turn around? */
+//            drive.stop();
+//        }
+//        /* And we don't have this system built yet, so we can't do anything here.
+//         * From now on we probably won't need to check currentProgramType any
+//         * more because we will be in the same place now: at the depot. */
+//
+//        /* Claim: drop the marker. */
+//
+//        /* Now sampling.  Ideally we would be able to pass flags at invocation
+//        /* This will likely need a new system in the hardware. */
+//
+//        /* Now sampling.  Ideally we would be able to pass flags at invocation
+//         * time to specify what sampling we are doing depending on what the
+//         * other team does, but is seems that Java runtime does not support
+//         * that in any convenient way. */
+//
+//        /* Sampling 1: drive to the first sampling place. */
+//
+//        /* Sampling 1: go until we find the gold mineral. */
+//        do {
+//            drive.update(0, -0.3, 0);
+//        } while (!detector.getAligned());
+//
+//        drive.stop();
+//        /* Sampling 1: do something to the mineral.  Will we pick it up or just
+//         * bump it? */
+//
+//        /* Just bump it*/
+//
+//        /* Sampling 2: drive to the second sampling place. */
+//        /* We will... */
+//        drive.update(1, 0, 0);
+//        sleep(250);
+//        drive.stop();
+//        sleep(500);
+//        drive.update(-0.5, 0, 0);
+//        sleep(500);
+//        /* Sampling 2: drive to the second sampling place. IF we are  */
+//
+//        /* Sampling 2: go until we find the gold mineral */
+//        do {
+//            drive.update(0, -0.3, 0);
+//        } while (!detector.getAligned());
+//        /* Sampling 2: do something to the mineral. */
+//        drive.update(1, 0, 0);
+//        sleep(250);
+//        drive.stop();
+//        sleep(500);
+//        drive.update(-0.5, 0, 0);
+//        sleep(500);
+//        /* If we picked up a mineral, maybe we could put it in the depot or
+//         * the cargo hold. */
+//
+//        /* Is that all? */
+//
+//        /*No, we might want to park halfway in the crater*/
+//
     }
 
     enum TeamColor {red, blue}
