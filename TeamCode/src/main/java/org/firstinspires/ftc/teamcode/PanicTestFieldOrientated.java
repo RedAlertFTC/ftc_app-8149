@@ -26,6 +26,8 @@ public class PanicTestFieldOrientated extends OpMode {
             rotationDrive;
     BNO055IMU imu;
 
+    boolean invertControls = false;
+
     boolean lastYInput = false;
 
     boolean fieldOrient = false;
@@ -43,10 +45,12 @@ public class PanicTestFieldOrientated extends OpMode {
 
     @Override
     public void loop() {
+        if (lastYInput != gamepad1.y && !lastYInput) {
+            invertControls ^= true;
+        }
 
-
-        velocityDrive = gamepad1.left_stick_y * 0.75f;
-        strafeDrive = gamepad1.left_stick_x * 0.75f;
+        velocityDrive = invertControls ? -gamepad1.left_stick_y : gamepad1.left_stick_y * 0.75f;
+        strafeDrive = invertControls ? gamepad1.left_stick_x : -gamepad1.left_stick_x * 0.75f;
         rotationDrive = -gamepad1.right_stick_x * 0.75f;
 
         x = strafeDrive;
@@ -79,7 +83,7 @@ public class PanicTestFieldOrientated extends OpMode {
                 rotationDrive * (1 - ((double) gamepad1.left_trigger * 0.7))
         );
 
-        if (gamepad1.a) {
+        if (gamepad2.a) {
             lift.extend();
         } else {
             lift.retract();

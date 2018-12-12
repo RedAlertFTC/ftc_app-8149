@@ -31,12 +31,12 @@ public class CollectionSystem {
     public double CollectionSpeed = UsualSpeed;
 
     public CollectionSystem(String MotorLName, String MotorRName) {
-        CollectionServoLName = MotorLName;
-        CollectionServoRName = MotorRName;
+        this.CollectionServoLName = MotorLName;
+        this.CollectionServoRName = MotorRName;
     }
 
     public CollectionSystem() {
-        new CollectionSystem("servoCollectionL", "servoCollectionR");
+        this("servoCollectionL", "servoCollectionR");
         /* Should InitMotor be called here? */
     }
 
@@ -44,12 +44,12 @@ public class CollectionSystem {
     /* I don't know if I'm doing this right.  I'm basically doing whatever was
      * in utils/MecanumDrive.java.
      */
-    public void init(HardwareMap HardwareMap) {
+    public void init(HardwareMap hardwareMap) {
         /* I think that thebiteffect did this part wrong; they didn't actually
         use the strings they got from the constructor, assuming the defaults.
          */
-        CollectionServoL = HardwareMap.crservo.get(CollectionServoLName);
-        CollectionServoR = HardwareMap.crservo.get(CollectionServoRName);
+        CollectionServoL = hardwareMap.crservo.get(CollectionServoLName);
+        CollectionServoR = hardwareMap.crservo.get(CollectionServoRName);
 
         /* To collect, the left wheel must  rotate clockwise and the right
          * servo would rotate counter-clockwise.  The servos are geared to the
@@ -58,8 +58,8 @@ public class CollectionSystem {
          * counter-clockwise is *probably* reverse, since we want a positive
          * speed to collect, hence this.
          */
-        CollectionServoL.setDirection(DcMotor.Direction.REVERSE);
-        CollectionServoR.setDirection(DcMotor.Direction.FORWARD);
+        CollectionServoL.setDirection(CRServo.Direction.REVERSE);
+        CollectionServoR.setDirection(CRServo.Direction.FORWARD);
 
         CollectionSpeed = 0;
     }

@@ -33,8 +33,8 @@ public class LiftSystem {
     }
 
     public LiftSystem() {
-        this(1, 0, 288 * 10);
-    }
+        this(1, 0, (int) (288 * 11.5));
+    } // Hi, I'm Java, and I don't know how to round
 
     public void init(HardwareMap hardwareMap) {
         liftMotor = hardwareMap.dcMotor.get(liftMotorName);
