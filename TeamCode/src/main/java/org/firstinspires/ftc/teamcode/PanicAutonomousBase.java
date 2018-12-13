@@ -62,12 +62,15 @@ public class PanicAutonomousBase extends LinearOpMode {
             sleep(FIXME);
             /*  Do we need to turn around? */
             drive.stop();
+
+            while(opModeIsActive()) {}
         } else {
-            drive.update(-0.3, 0, 0);
+            drive.updateTarget(18);
+            sleep(FIXME); //Is this needed
+            //I think we need to turn like 45 degrees here
+            drive.updateTarget(FIXME);
             sleep(FIXME);
-            drive.update(0, 0, 0.3);
-            sleep(FIXME);
-            drive.update(0.3, 0, 0);
+            drive.updateTarget(FIXME);
             sleep(FIXME);
             /*  Do we need to turn around? */
             drive.stop();
@@ -97,7 +100,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         /* Sampling 1: do something to the mineral.  Will we pick it up or just
          * bump it? */
 
-        /* Just bump it*/
+        /* bump.mp4 */
 
         /* Sampling 2: drive to the second sampling place. */
         /* We will... */
