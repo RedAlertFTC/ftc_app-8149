@@ -65,13 +65,14 @@ public class PanicAutonomousBase extends LinearOpMode {
 
             while(opModeIsActive()) {}
         } else {
-            drive.updateTarget(FIXME, FIXME, FIXME);
-            sleep(FIXME); //Is this needed?
-            //I think we need to turn like 45 degrees here
-            drive.updateTarget(FIXME, FIXME, FIXME);
-            sleep(FIXME);
-            drive.updateTarget(FIXME, FIXME, FIXME);
-            sleep(FIXME);
+            drive.updateTarget(-1, 0, 0);
+            sleep(1250); //rough value
+            drive.updateTarget(0, 0, 1);
+            sleep(250); //rough value
+            drive.updateTarget(1, 0, 0);
+            sleep(4000); //rough value
+            drive.updateTarget(0,1,0);
+            sleep(500); //rough value
             /*  Do we need to turn around? */
             drive.stop();
         }
