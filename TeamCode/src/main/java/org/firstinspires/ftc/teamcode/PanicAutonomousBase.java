@@ -15,7 +15,7 @@ public class PanicAutonomousBase extends LinearOpMode {
     CollectionSystem collection = new CollectionSystem();
     TeamColor currentTeam;
     ProgramType currentProgramType;
-    /* This might change, as we might combine the collection and lift arms. */1
+    /* This might change, as we might combine the collection and lift arms. */
     // OpenGLMatrix whereWeAre = new OpenGLMatrix(), whereWeNeedToGo = new OpenGLMatrix();
     int FIXME = 0; // for error free builds!
 
@@ -50,7 +50,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         /* Landing */
         lift.extend();
         sleep(6750);
-        drive.updateTarget(0, 0.5, 0);
+        drive.updateTarget(0, 1, 0);
         sleep(250); /* FIXME: probably way off */
         drive.stop();
 
@@ -65,12 +65,12 @@ public class PanicAutonomousBase extends LinearOpMode {
 
             while(opModeIsActive()) {}
         } else {
-            drive.updateTarget(FIXME);
+            drive.updateTarget(FIXME, FIXME, FIXME);
             sleep(FIXME); //Is this needed?
             //I think we need to turn like 45 degrees here
-            drive.updateTarget(FIXME);
+            drive.updateTarget(FIXME, FIXME, FIXME);
             sleep(FIXME);
-            drive.updateTarget(FIXME);
+            drive.updateTarget(FIXME, FIXME, FIXME);
             sleep(FIXME);
             /*  Do we need to turn around? */
             drive.stop();
@@ -95,7 +95,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         do {
             drive.update(0, -0.3, 0);
         } while (!detector.getAligned());
-0
+
         drive.stop();
         /* Sampling 1: do something to the mineral.  Will we pick it up or just
          * bump it? */
