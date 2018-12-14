@@ -17,7 +17,7 @@ public class PanicAutonomousBase extends LinearOpMode {
     ProgramType currentProgramType;
     /* This might change, as we might combine the collection and lift arms. */
     // OpenGLMatrix whereWeAre = new OpenGLMatrix(), whereWeNeedToGo = new OpenGLMatrix();
-    long FIXME = 0; // for error free builds!
+    int FIXME = 0; // for error free builds!
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -50,8 +50,8 @@ public class PanicAutonomousBase extends LinearOpMode {
         /* Landing */
         lift.extend();
         sleep(6750);
-        drive.updateTarget(0, 0, 0);
-        sleep(100); /* FIXME: probably way off */
+        drive.updateTarget(0, 1, 0);
+        sleep(250); /* FIXME: probably way off */
         drive.stop();
 
         /* Claim: go to the depot. */
@@ -62,13 +62,17 @@ public class PanicAutonomousBase extends LinearOpMode {
             sleep(FIXME);
             /*  Do we need to turn around? */
             drive.stop();
+
+            while(opModeIsActive()) {}
         } else {
-            drive.update(-0.3, 0, 0);
-            sleep(FIXME);
-            drive.update(0, 0, 0.3);
-            sleep(FIXME);
-            drive.update(0.3, 0, 0);
-            sleep(FIXME);
+            drive.updateTarget(-1, 0, 0);
+            sleep(1250); //rough value
+            drive.updateTarget(0, 0, 1);
+            sleep(250); //rough value
+            drive.updateTarget(1, 0, 0);
+            sleep(4000); //rough value
+            drive.updateTarget(0,1,0);
+            sleep(500); //rough value
             /*  Do we need to turn around? */
             drive.stop();
         }
@@ -97,7 +101,7 @@ public class PanicAutonomousBase extends LinearOpMode {
         /* Sampling 1: do something to the mineral.  Will we pick it up or just
          * bump it? */
 
-        /* Just bump it*/
+        /* bump.mp4 */
 
         /* Sampling 2: drive to the second sampling place. */
         /* We will... */
