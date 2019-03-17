@@ -7,11 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  */
 
 @Autonomous(name = "Panic: Demo 1", group = "Panic")
-public class PanicDemOne extends PanicAutonomousBase {
+public class PanicDemOne extends PanicAutonomousDemo {
     @Override
     public void runOpMode() throws InterruptedException {
-        currentTeam = TeamColor.blue;
-        currentProgramType = ProgramType.depot;
+        currentTeam = PanicAutonomousDemo.TeamColor.blue;
         super.runOpMode();
     }
 }
