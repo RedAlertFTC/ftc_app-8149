@@ -63,6 +63,7 @@ public class PanicAutonomousBase extends LinearOpMode {
             /*  Do we need to turn around? */
             drive.stop();
 
+
             while(opModeIsActive()) {}
         } else {
             drive.updateTarget(-1, 0, 0);
